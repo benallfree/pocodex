@@ -19,7 +19,7 @@
   "dependencies": {
     "env-var": "^7.5.0",
     "fs-extra": "^11.2.0",
-    "pocketbase-node": "../node"
+    "pocketbase-node": "^0.0.1"
   },
   "files": [
     "src/**",

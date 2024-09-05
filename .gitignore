@@ -3,3 +3,4 @@ pb_data
 test/pb_hooks
 .DS_Store
 *.tgz
+.npmrc

@@ -6,7 +6,7 @@ const {
   path,
   process,
   child_process,
-} = require('/Volumes/Code/repos/pocketbase-codex/packages/node')
+} = require(`pocketbase-node`)
 
 dbg('Hello from PocketBase Codex bootstrap')
 
@@ -65,7 +65,7 @@ cmd.addCommand(
     short: 'i',
     run: (cmd, args) => {
       const name = args.shift()
-      dbg({ cmd, name, args })
+      // dbg({ cmd, name, args })
 
       const packageManager = getPackageManager()
 

@@ -12,6 +12,6 @@
     "pocketbase-codex"
   ],
   "dependencies": {
-    "pocketbase-codex": "../codex"
+    "pocketbase-codex": "^0.0.1"
   }
 }
