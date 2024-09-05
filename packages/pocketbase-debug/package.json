@@ -1,0 +1,25 @@
+{
+  "name": "pocketbase-debug",
+  "version": "0.0.1",
+  "description": "Debugging and safe stringification utilities for PocketBase",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benallfree/pocketbase-debug"
+  },
+  "author": {
+    "name": "Ben Allfree"
+  },
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "postinstall": "node ./src/postinstall.js"
+  },
+  "files": [
+    "src/**",
+    "package.json",
+    "../README.md"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.5.4"
+  }
+}

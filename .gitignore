@@ -2,3 +2,4 @@ node_modules
 pb_data
 test/pb_hooks
 .DS_Store
+*.tgz
