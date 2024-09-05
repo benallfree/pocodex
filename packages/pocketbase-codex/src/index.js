@@ -1,10 +1,11 @@
 /// <reference path="../../types.d.ts" />
 
 const {
-  log: { dbg },
+  log: { dbg, error, info },
   fs,
   path,
   process,
+  child_process,
 } = require('/Volumes/Code/repos/pocketbase-plugins/packages/pocketbase-node')
 
 dbg('Hello from PocketBase Codex bootstrap')
@@ -32,6 +33,27 @@ function getPackageManager() {
   return `npm` // No lock file found
 }
 
+function installPackage(manager, packageName) {
+  const command =
+    manager === 'npm'
+      ? `npm install ${packageName}`.split(' ')
+      : manager === 'yarn'
+      ? `yarn add ${packageName}`.split(' ')
+      : manager === 'pnpm'
+      ? `pnpm add ${packageName}`.split(' ')
+      : manager === 'bun'
+      ? `bun add ${packageName}`.split(' ')
+      : null
+
+  if (!command) {
+    error('Unsupported package manager')
+    return
+  }
+
+  const output = child_process.execSync(command)
+  return output
+}
+
 cmd.addCommand(
   new Command({
     use: 'install [name]',
@@ -45,7 +67,14 @@ cmd.addCommand(
       const name = args.shift()
       dbg({ cmd, name, args })
 
-      dbg(getPackageManager())
+      const packageManager = getPackageManager()
+
+      try {
+        const output = installPackage(packageManager, name)
+        info(output)
+      } catch (e) {
+        error(`Failed to install package ${name}: ${e}`)
+      }
 
       dbg('Hello from codex install command!')
     },
