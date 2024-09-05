@@ -1,0 +1,29 @@
+{
+  "name": "pocketbase-plugins",
+  "version": "0.0.1",
+  "description": "PocketBase plugins CLI command",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benallfree/pocketbase-plugins"
+  },
+  "author": {
+    "name": "Ben Allfree"
+  },
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "postinstall": "node ./src/postinstall.js"
+  },
+  "dependencies": {
+    "env-var": "^7.5.0",
+    "fs-extra": "^11.2.0"
+  },
+  "files": [
+    "src/**",
+    "package.json",
+    "../README.md"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.5.4"
+  }
+}
