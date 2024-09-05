@@ -1,0 +1,22 @@
+{
+  "name": "pocketbase-node",
+  "version": "0.0.1",
+  "description": "Node compatibility layer for PocketBase",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benallfree/pocketbase-node"
+  },
+  "bugs": {
+    "url": "https://github.com/benallfree/pocketbase-node/issues"
+  },
+  "author": {
+    "name": "Ben Allfree"
+  },
+  "main": "index.js",
+  "files": [
+    "*.js",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

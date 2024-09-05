@@ -1,5 +1,3 @@
-const stringify = require(`./safe-stable-stringify`)
-
 const replacer = (k, v) => {
   if (v instanceof Error) {
     return v.stack
@@ -13,7 +11,7 @@ const replacer = (k, v) => {
   return v
 }
 
-const dbg = (...objs) => {
+const prepare = (objs) => {
   const parts = objs.map((o) => {
     if (o instanceof Error) {
       return o.stack
@@ -29,7 +27,27 @@ const dbg = (...objs) => {
     }
     return o
   })
-  $app.logger().debug(parts.join(` `))
+  return parts.join(` `)
 }
 
-module.exports = { dbg, stringify }
+const dbg = (...objs) => {
+  const s = prepare(objs)
+  $app.logger().debug(s)
+}
+
+const info = (...objs) => {
+  const s = prepare(objs)
+  $app.logger().info(s)
+}
+
+const warn = (...objs) => {
+  const s = prepare(objs)
+  $app.logger().warn(s)
+}
+
+const error = (...objs) => {
+  const s = prepare(objs)
+  $app.logger().error(s)
+}
+
+module.exports = { dbg, info, warn, error, stringify }

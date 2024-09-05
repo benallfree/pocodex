@@ -12,6 +12,7 @@ const HOOKS_ROOT = (...paths) => join(PB_ROOT(), `pb_hooks`, ...paths)
 const PACKAGE_NAME = pkg.name
 const HOOK_NAME = `${PACKAGE_NAME}.pb.js`
 
+console.log({ PACKAGE_NAME }, env.get(`npm_package_name`).asString())
 const isInSelf = env.get(`npm_package_name`).asString() === PACKAGE_NAME
 
 // console.log(`isInSelf: ${isInSelf}`)
