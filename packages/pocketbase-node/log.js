@@ -11,6 +11,8 @@ const replacer = (k, v) => {
   return v
 }
 
+const { stringify } = require('./stringify')
+
 const prepare = (objs) => {
   const parts = objs.map((o) => {
     if (o instanceof Error) {

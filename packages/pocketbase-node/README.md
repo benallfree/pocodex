@@ -33,8 +33,24 @@ A cycle-safe stable stringify.
 
 ## fs
 
-const { readFileSync, existsSync } = require('pocketbase-node/fs')
+```js
+const fs = require('fs')
+```
+
+becomes
+
+```js
+const fs = require('pocketbase-node/fs')
+```
 
 ## path
 
 const { join, basename, dirname } = require('pocketbase-node/path')
+
+## Why not alias
+
+While `npm i fs@npm:pocketbase-node-fs` might work, it would interfere with actual node-compatible CLI tools that you may want to run in your PocketBase project root.
+
+## If PocketBase can...we will...
+
+`const fs = require('pocketbase-node/fs')`

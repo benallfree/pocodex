@@ -8,8 +8,10 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": { "pocketbase-codex": "../pocketbase-codex" },
   "trustedDependencies": [
     "pocketbase-codex"
-  ]
+  ],
+  "dependencies": {
+    "pocketbase-codex": "../pocketbase-codex"
+  }
 }

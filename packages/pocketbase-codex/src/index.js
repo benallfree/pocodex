@@ -1,17 +1,36 @@
 /// <reference path="../../types.d.ts" />
 
 const {
-  dbg,
+  log: { dbg },
+  fs,
+  path,
+  process,
 } = require('/Volumes/Code/repos/pocketbase-plugins/packages/pocketbase-node')
 
 dbg('Hello from PocketBase Codex bootstrap')
 
 const cmd = new Command({
   use: 'codex',
-  run: (cmd, args) => {
-    console.log('Hello from codex command!')
-  },
 })
+
+function getPackageManager() {
+  const lockFiles = {
+    'package-lock.json': 'npm',
+    'yarn.lock': 'yarn',
+    'pnpm-lock.yaml': 'pnpm',
+    'bun.lockb': 'bun',
+  }
+
+  for (const [file, manager] of Object.entries(lockFiles)) {
+    const lockFile = path.join(process.cwd(), file)
+    // dbg(`Searching for ${lockFile}`)
+    if (fs.existsSync(lockFile)) {
+      return manager
+    }
+  }
+
+  return `npm` // No lock file found
+}
 
 cmd.addCommand(
   new Command({
@@ -25,6 +44,9 @@ cmd.addCommand(
     run: (cmd, args) => {
       const name = args.shift()
       dbg({ cmd, name, args })
+
+      dbg(getPackageManager())
+
       dbg('Hello from codex install command!')
     },
   })
@@ -32,10 +54,23 @@ cmd.addCommand(
 
 cmd.addCommand(
   new Command({
-    use: `uninstall`,
+    use: `uninstall [name]`,
     run: (cmd, args) => {
-      console.log(`Hello from codex uninstall command!`)
+      dbg(`Hello from codex uninstall command!`)
     },
   })
 )
+
+// let listGlobal = false
+// const listCommand = new Command({
+//   use: `list`,
+//   short: 'ls',
+
+//   run: (cmd, args) => {
+//     dbg(`Hello from codex list command!`, { listGlobal })
+//   },
+// })
+// listCommand.flags().boolVar(listGlobal, 'global', 'g', 'List global plugins')
+// cmd.addCommand(listCommand)
+
 $app.rootCmd.addCommand(cmd)
