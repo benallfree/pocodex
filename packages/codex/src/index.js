@@ -6,7 +6,7 @@ const {
   path,
   process,
   child_process,
-} = require('/Volumes/Code/repos/pocketbase-plugins/packages/pocketbase-node')
+} = require('/Volumes/Code/repos/pocketbase-plugins/packages/node')
 
 dbg('Hello from PocketBase Codex bootstrap')
 
