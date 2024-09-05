@@ -9,9 +9,9 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "pocketbase-plugins": "../package"
+    "pocketbase-codex": "../package"
   },
   "trustedDependencies": [
-    "pocketbase-plugins"
+    "pocketbase-codex"
   ]
 }

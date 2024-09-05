@@ -1,10 +1,10 @@
 {
-  "name": "pocketbase-plugins",
+  "name": "pocketbase-codex",
   "version": "0.0.1",
-  "description": "PocketBase plugins CLI command",
+  "description": "PocketBase Codex CLI command",
   "repository": {
     "type": "git",
-    "url": "https://github.com/benallfree/pocketbase-plugins"
+    "url": "https://github.com/benallfree/pocketbase-codex"
   },
   "author": {
     "name": "Ben Allfree"
