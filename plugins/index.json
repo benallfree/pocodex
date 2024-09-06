@@ -1,7 +1,0 @@
-{
-  "otp": {
-    "name": "One-Time Passwords",
-    "description": "One-Time Passwords API for PocketBase",
-    "package": "pocketbase-plugin-otp"
-  }
-}

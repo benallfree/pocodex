@@ -1,4 +1,4 @@
-/// <reference path="../../types.d.ts" />
+/// <reference path="../../jsvm.d.ts" />
 
 const {
   log: { dbg, error, info },
@@ -54,17 +54,23 @@ function installPackage(manager, packageName) {
   return output
 }
 
+const migrateUp = (/** @type {import('./codex').Plugin} */ plugin) => {
+  const migrations = plugin.migrations()
+  for (const [name, { up, down }] of Object.entries(migrations)) {
+    dbg(`Running migration ${name}`)
+    up()
+  }
+}
+
 cmd.addCommand(
   new Command({
     use: 'install [name]',
-    args: (cmd, args) => {
-      if (args.length < 1) {
-        throw new Error('Plugin name is required')
-      }
-    },
     short: 'i',
     run: (cmd, args) => {
       const name = args.shift()
+      if (!name) {
+        throw new Error('Plugin name is required')
+      }
       // dbg({ cmd, name, args })
 
       const packageManager = getPackageManager()
@@ -72,11 +78,47 @@ cmd.addCommand(
       try {
         const output = installPackage(packageManager, name)
         info(output)
+        const plugin = require(name)((up, down) => ({
+          up,
+          down,
+        }))
+        dbg({ plugin })
+        migrateUp(plugin)
       } catch (e) {
         error(`Failed to install package ${name}: ${e}`)
       }
 
       dbg('Hello from codex install command!')
+    },
+  })
+)
+
+cmd.addCommand(
+  new Command({
+    use: 'enable [name]',
+    args: (cmd, args) => {
+      if (args.length < 1) {
+        throw new Error('Enable the plugin')
+      }
+    },
+    short: 'e',
+    run: (cmd, args) => {
+      dbg('Hello from codex enable command!')
+    },
+  })
+)
+
+cmd.addCommand(
+  new Command({
+    use: 'disable [name]',
+    args: (cmd, args) => {
+      if (args.length < 1) {
+        throw new Error('Disable the plugin')
+      }
+    },
+    short: 'd',
+    run: (cmd, args) => {
+      dbg('Hello from codex disable command!')
     },
   })
 )
@@ -102,4 +144,11 @@ cmd.addCommand(
 // listCommand.flags().boolVar(listGlobal, 'global', 'g', 'List global plugins')
 // cmd.addCommand(listCommand)
 
-$app.rootCmd.addCommand(cmd)
+$app.rootCmd?.addCommand(cmd)
+
+onAfterBootstrap((e) => {
+  const {
+    log: { dbg },
+  } = require(`pocketbase-node`)
+  dbg('Hello from PocketBase Codex after bootstrap')
+})

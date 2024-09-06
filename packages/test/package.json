@@ -2,6 +2,9 @@
   "name": "pocketbase-plugins-test",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "postinstall": "bun link pocketbase-codex pocketbase-node pocketbase-otp --ignore-scripts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -12,6 +15,6 @@
     "pocketbase-codex"
   ],
   "dependencies": {
-    "pocketbase-codex": "^0.0.1"
+    "pocketbase-codex": "^0.0.1-0"
   }
 }
