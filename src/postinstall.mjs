@@ -10,7 +10,7 @@ const PB_ROOT = (...paths) =>
 const PACKAGE_ROOT = (...paths) => join(cwd(), ...paths)
 const HOOKS_ROOT = (...paths) => join(PB_ROOT(), `pb_hooks`, ...paths)
 const PACKAGE_NAME = pkg.name
-const HOOK_NAME = `${PACKAGE_NAME}.pb.js`
+const HOOK_NAME = `pocodex.pb.js`
 
 const isInSelf = env.get(`npm_package_name`).asString() === PACKAGE_NAME
 

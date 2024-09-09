@@ -1,4 +1,4 @@
-/// <reference path="../../jsvm.d.ts" />
+/// <reference path="../jsvm.d.ts" />
 
 const {
   log: { dbg, error, info },
