@@ -1,4 +1,3 @@
-import { copyFileSync } from 'fs'
 import { globSync } from 'glob'
 import { defineConfig } from 'tsup'
 
@@ -8,7 +7,7 @@ const files = [`pb_hooks`, `pb_migrations`]
       console.log({ file })
       acc[file.slice(0, -3)] = `src/${file}`
       return acc
-    }, {})
+    }, {}),
   )
   .reduce((acc, obj) => ({ ...acc, ...obj }), {})
 
@@ -18,6 +17,7 @@ export default defineConfig({
     index: 'src/index.ts',
     pb: 'src/pb/index.ts',
     cli: 'src/cli.ts',
+    [`pb_hooks/pocodex.pb`]: 'src/pb_hooks/pocodex.pb.ts',
   },
   dts: {
     entry: ['./src/index.ts'],
@@ -35,6 +35,6 @@ export default defineConfig({
   // https://github.com/egoist/tsup/issues/619
   noExternal: [/^pocketbase-/],
   splitting: false,
-  onSuccess: `cp src/*.d.ts dist && cp -r src/pb_hooks dist && cp -r src/pb_migrations dist`,
+  onSuccess: `cp src/*.d.ts dist && cp -r src/pb_migrations dist`,
 })
 ;``

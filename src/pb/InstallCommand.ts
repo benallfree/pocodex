@@ -1,10 +1,11 @@
-import { dbg, info, error } from 'pocketbase-log'
+import { dbg, error, info } from 'pocketbase-log'
+import { PluginConfigured, PluginFactory } from '../types'
+import { migrateUp } from './migrateUp'
 import { getPackageManager, installPackage } from './PackageManager'
 import { initPluginMeta } from './pluginMeta'
-import { migrateUp } from './migrateUp'
 
-export const InstallCommand = () =>
-  new Command({
+export const InstallCommand = () => {
+  const cmd = new Command({
     use: 'install [name]',
     short: `Install a plugin`,
     run: (cmd, args) => {
@@ -15,33 +16,49 @@ export const InstallCommand = () =>
       }
       // dbg({ cmd, name, args })
       $app.dao().db().newQuery(`delete from pocodex`).execute()
-      $app
-        .dao()
-        .db()
-        .newQuery(`delete from _collections where name = 'plugin-otp-tokens'`)
-        .execute()
-      $app.dao().db().newQuery(`drop table 'plugin-otp-tokens'`).execute()
 
       const packageManager = getPackageManager()
 
       try {
         $app.dao().runInTransaction((txDao) => {
-          const output = installPackage(packageManager, pluginName)
+          const output = installPackage(packageManager, pluginName, link)
           info(output)
           initPluginMeta(txDao, pluginName)
-          const pluginModule = require(pluginName)((up, down) => ({
-            up,
-            down,
-          }))
-          pluginModule.name = pluginName
+          const module = require(`${pluginName}/dist/plugin`)
+          const factory = (module.default ||
+            module.plugin ||
+            module) as PluginFactory
+          if (typeof factory !== 'function') {
+            error(`Plugin ${pluginName} does not export a factory function`)
+            return
+          }
+          dbg({ factory })
+          const pluginModule = factory({
+            migrate: (up, down) => ({
+              up,
+              down,
+            }),
+          })
+          const configuredModule: PluginConfigured = {
+            name: pluginName,
+            ...pluginModule,
+          }
           // dbg({ pluginModule })
-          migrateUp(txDao, pluginModule)
+          migrateUp(txDao, configuredModule)
         })
       } catch (e) {
         error(`Failed to install package ${pluginName}: ${e}`)
-        error(e.stack)
+        if (e instanceof Error) {
+          error(e.stack)
+        }
       }
 
       dbg('Hello from pocodex install command!')
     },
   })
+  let link = cmd
+    .flags()
+    .boolP('link', 'l', false, 'Use link: prefix for local development')
+
+  return cmd
+}

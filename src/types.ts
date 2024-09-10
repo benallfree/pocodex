@@ -14,4 +14,10 @@ export type Plugin = {
   files(): Record<string, string>
   migrations(): { [migrationName: string]: MigrationSet }
 }
+export type PluginConfigured = Plugin & { name: string }
+
 export type PluginFactory = (config: PluginConfig) => Plugin
+
+export type PluginMeta = {
+  migrations: { [migrationName: string]: boolean }
+}

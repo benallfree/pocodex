@@ -1,5 +1,5 @@
-import { path, fs, child_process, process } from 'pocketbase-node'
-import { error, dbg } from 'pocketbase-log'
+import { dbg, error } from 'pocketbase-log'
+import { child_process, fs, path, process } from 'pocketbase-node'
 
 function getPackageManager() {
   const lockFiles = {
@@ -20,23 +20,25 @@ function getPackageManager() {
   return `npm` // No lock file found
 }
 
-function installPackage(manager: string, packageName: string) {
+function installPackage(manager: string, packageName: string, link = false) {
+  const finalPackageName = `${packageName}${link ? `@link:${packageName}` : ''}`
   const command =
     manager === 'npm'
-      ? `npm install ${packageName}`.split(' ')
+      ? `npm install ${finalPackageName}`.split(' ')
       : manager === 'yarn'
-      ? `yarn add ${packageName}`.split(' ')
-      : manager === 'pnpm'
-      ? `pnpm add ${packageName}`.split(' ')
-      : manager === 'bun'
-      ? `bun add ${packageName}`.split(' ')
-      : null
+        ? `yarn add ${finalPackageName}`.split(' ')
+        : manager === 'pnpm'
+          ? `pnpm add ${finalPackageName}`.split(' ')
+          : manager === 'bun'
+            ? `bun add ${finalPackageName}`.split(' ')
+            : null
 
   if (!command) {
     error('Unsupported package manager')
     return
   }
 
+  dbg({ command })
   const output = child_process.execSync(command)
   return output
 }

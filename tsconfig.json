@@ -3,7 +3,9 @@
     "module": "commonjs",
     "lib": ["ESNext"],
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "strict": true
   },
   "include": ["src/**/*.ts"]
 }

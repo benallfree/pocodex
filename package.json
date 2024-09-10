@@ -39,6 +39,15 @@
     "@types/node": "^22.5.4",
     "pocketbase-log": "link:pocketbase-log",
     "pocketbase-node": "link:pocketbase-node",
+    "prettier": "^3.3.3",
+    "prettier-plugin-organize-imports": "^4.0.0",
     "rimraf": "^6.0.1"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ]
   }
 }
