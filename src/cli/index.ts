@@ -3,4 +3,6 @@ import { RootCommand } from './RootCommand'
 
 info('Hello from pocodex CLI bootstrap')
 
-$app.rootCmd.addCommand(RootCommand())
+export const Init = () => {
+  $app.rootCmd.addCommand(RootCommand())
+}

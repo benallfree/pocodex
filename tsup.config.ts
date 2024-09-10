@@ -1,7 +1,7 @@
+import { copyFileSync } from 'fs'
 import { globSync } from 'glob'
 import { defineConfig } from 'tsup'
 
-console.log(globSync(`pb_hooks/*.js`, { cwd: `src` }))
 const files = [`pb_hooks`, `pb_migrations`]
   .map((pfx) =>
     globSync(`${pfx}/*.js`, { cwd: `src` }).reduce((acc, file) => {
@@ -11,19 +11,23 @@ const files = [`pb_hooks`, `pb_migrations`]
     }, {})
   )
   .reduce((acc, obj) => ({ ...acc, ...obj }), {})
-console.log(files)
+
 export default defineConfig({
   format: ['cjs'],
   entry: {
-    types: 'src/types.ts',
-    cli: 'src/entries/cli/index.ts',
+    index: 'src/index.ts',
+    cli: 'src/cli/index.ts',
     postinstall: 'src/postinstall.ts',
     ...files,
   },
-  dts: true,
+  dts: {
+    entry: ['./src/index.ts'],
+    resolve: true,
+    banner: `/// <reference types="./jsvm" />\n/// <reference types="./jsvm-extra" />`,
+  },
   shims: true,
   skipNodeModulesBundle: true,
-  clean: true,
+  clean: false,
   target: 'node20',
   platform: 'node',
   minify: false,
@@ -32,5 +36,6 @@ export default defineConfig({
   // https://github.com/egoist/tsup/issues/619
   noExternal: [/(.*)/],
   splitting: false,
+  onSuccess: `cp src/*.d.ts dist`,
 })
 ;``

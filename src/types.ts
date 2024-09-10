@@ -1,3 +1,6 @@
+/// <reference types="./jsvm" />
+/// <reference types="./jsvm-extra" />
+
 export type MigrationFunction = (db: dbx.Builder) => void
 export type MigrationSet = { up: MigrationFunction; down: MigrationFunction }
 export type PluginConfig = {

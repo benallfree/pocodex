@@ -1,5 +1,5 @@
 import { dbg } from 'pocketbase-log'
-import { Plugin } from '../../types'
+import { Plugin } from '../types'
 import { updatePluginMeta } from './pluginMeta'
 
 export const migrateUp = (dao, plugin: Plugin) => {

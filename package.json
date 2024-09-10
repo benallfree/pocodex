@@ -13,10 +13,10 @@
   "author": {
     "name": "Ben Allfree"
   },
-  "main": "dist/pocodex.pb.js",
-  "types": "dist/types.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup",
+    "build": "rimraf dist && tsup",
     "watch": "bun run build --watch",
     "postinstall": "node ./dist/postinstall.js || true"
   },
@@ -30,6 +30,7 @@
     "@types/node": "^22.5.4",
     "pocketbase-log": "link:pocketbase-log",
     "pocketbase-node": "link:pocketbase-node",
+    "rimraf": "^6.0.1",
     "tsup": "^8.2.4",
     "typescript": "^5.6.2"
   },
