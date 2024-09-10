@@ -5,7 +5,8 @@ import { Plugin } from '../types'
 dbg('Hello from PocketBase Codex bootstrap')
 
 const cmd = new Command({
-  use: 'codex',
+  use: 'pocodex',
+  short: 'Access the pocodex, the Unofficial PocketBase Codex',
 })
 
 const initPluginMeta = (dao, name) => {
@@ -37,8 +38,6 @@ const migrateUp = (dao, plugin: Plugin) => {
     }))
   })
 }
-
-$app.dao().db()
 
 cmd.addCommand(
   new Command({
