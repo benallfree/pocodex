@@ -18,7 +18,6 @@ export default defineConfig({
     index: 'src/index.ts',
     pb: 'src/pb/index.ts',
     cli: 'src/cli.ts',
-    postinstall: 'src/postinstall.ts',
   },
   dts: {
     entry: ['./src/index.ts'],
@@ -34,7 +33,7 @@ export default defineConfig({
   sourcemap: 'inline',
   bundle: true,
   // https://github.com/egoist/tsup/issues/619
-  noExternal: [/(.*)/],
+  noExternal: [/^pocketbase-/],
   splitting: false,
   onSuccess: `cp src/*.d.ts dist && cp -r src/pb_hooks dist && cp -r src/pb_migrations dist`,
 })

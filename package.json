@@ -16,7 +16,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "pocodex": "dist/index.js"
+    "pocodex": "dist/cli.js"
   },
   "scripts": {
     "build": "rimraf dist && tsup",
@@ -27,16 +27,18 @@
     "cli",
     "*.mjs"
   ],
-  "devDependencies": {
-    "@inquirer/prompts": "^5.5.0",
-    "@types/node": "^22.5.4",
-    "pocketbase-log": "link:pocketbase-log",
-    "pocketbase-node": "link:pocketbase-node",
-    "rimraf": "^6.0.1",
+  "dependencies": {
     "tsup": "^8.2.4",
     "typescript": "^5.6.2",
     "commander": "^12.1.0",
     "glob": "^11.0.0",
-    "ora": "^8.1.0"
+    "ora": "^8.1.0",
+    "@inquirer/prompts": "^5.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "pocketbase-log": "link:pocketbase-log",
+    "pocketbase-node": "link:pocketbase-node",
+    "rimraf": "^6.0.1"
   }
 }
