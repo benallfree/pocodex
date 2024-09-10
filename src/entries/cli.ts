@@ -1,13 +1,6 @@
-/// <reference path="../jsvm.d.ts" />
-
-const {
-  log: { dbg, error, info },
-  fs,
-  path,
-  process,
-  child_process,
-} = require(`pocketbase-node`)
-const { getPackageManager, installPackage } = require('./pm')
+import { dbg, info, error } from 'pocketbase-log'
+import { getPackageManager, installPackage } from '../lib/pm'
+import { Plugin } from '../types'
 
 dbg('Hello from PocketBase Codex bootstrap')
 
@@ -24,25 +17,28 @@ const initPluginMeta = (dao, name) => {
   dao.saveRecord(record)
 }
 
-updatePluginMeta = (txDao, pluginName, update) => {
+const updatePluginMeta = (txDao, pluginName, update) => {
   dbg(`***updatePluginMeta`, { pluginName })
   const record = txDao.findFirstRecordByData('codex', 'key', pluginName)
   update(record)
   txDao.saveRecord(record)
 }
 
-const migrateUp = (dao, pluginModule) => {
-  const migrations = pluginModule.migrations()
+const migrateUp = (dao, plugin: Plugin) => {
+  const migrations = plugin.migrations()
 
-  for (const [migrationName, { up, down }] of Object.entries(migrations)) {
+  Object.entries(migrations).forEach(([migrationName, migrationSet]) => {
+    const { up } = migrationSet
     dbg(`Running migration ${migrationName}`)
     up(dao.db())
-    updatePluginMeta(dao, pluginModule.name, (meta) => ({
+    updatePluginMeta(dao, plugin, (meta) => ({
       ...meta,
       migrations: { ...meta.migrations, [migrationName]: true },
     }))
-  }
+  })
 }
+
+$app.dao().db()
 
 cmd.addCommand(
   new Command({
@@ -140,10 +136,3 @@ cmd.addCommand(
 // cmd.addCommand(listCommand)
 
 $app.rootCmd?.addCommand(cmd)
-
-onAfterBootstrap((e) => {
-  const {
-    log: { dbg },
-  } = require(`pocketbase-node`)
-  dbg('Hello from PocketBase Codex after bootstrap')
-})

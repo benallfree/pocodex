@@ -1,5 +1,5 @@
-const { path, fs, child_process, process } = require('pocketbase-node')
-const { error, dbg } = require('pocketbase-node/log')
+import { path, fs, child_process, process } from 'pocketbase-node'
+import { error, dbg } from 'pocketbase-log'
 
 function getPackageManager() {
   const lockFiles = {
@@ -20,7 +20,7 @@ function getPackageManager() {
   return `npm` // No lock file found
 }
 
-function installPackage(manager, packageName) {
+function installPackage(manager: string, packageName: string) {
   const command =
     manager === 'npm'
       ? `npm install ${packageName}`.split(' ')
@@ -41,7 +41,4 @@ function installPackage(manager, packageName) {
   return output
 }
 
-module.exports = {
-  getPackageManager,
-  installPackage,
-}
+export { getPackageManager, installPackage }

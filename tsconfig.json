@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["ESNext"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts"]
+}
