@@ -9,10 +9,9 @@ export type PluginConfig = {
 
 export type Plugin = {
   init(): void
-  hooks(): void
   install(): void
   uninstall(): void
   files(): Record<string, string>
   migrations(): { [migrationName: string]: MigrationSet }
 }
-export type PluginModuleFactory = (config: PluginConfig) => Plugin
+export type PluginFactory = (config: PluginConfig) => Plugin

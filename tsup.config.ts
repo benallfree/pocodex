@@ -16,9 +16,9 @@ export default defineConfig({
   format: ['cjs'],
   entry: {
     index: 'src/index.ts',
-    cli: 'src/cli/index.ts',
+    pb: 'src/pb/index.ts',
+    cli: 'src/cli.ts',
     postinstall: 'src/postinstall.ts',
-    ...files,
   },
   dts: {
     entry: ['./src/index.ts'],
@@ -36,6 +36,6 @@ export default defineConfig({
   // https://github.com/egoist/tsup/issues/619
   noExternal: [/(.*)/],
   splitting: false,
-  onSuccess: `cp src/*.d.ts dist`,
+  onSuccess: `cp src/*.d.ts dist && cp -r src/pb_hooks dist && cp -r src/pb_migrations dist`,
 })
 ;``
