@@ -12967,7 +12967,7 @@ namespace cobra {
         _arg1: Array<string>,
         _arg2: string
       ) => [Array<string>, ShellCompDirective],
-      boolean
+      boolean,
     ]
   }
   interface Command {
@@ -17805,9 +17805,10 @@ namespace daos {
    * ExpandFetchFunc defines the function that is used to fetch the expanded relation records.
    */
   interface ExpandFetchFunc {
-    (relCollection: models.Collection, relIds: Array<string>): Array<
-      models.Record | undefined
-    >
+    (
+      relCollection: models.Collection,
+      relIds: Array<string>
+    ): Array<models.Record | undefined>
   }
   // @ts-ignore
   import validation = ozzo_validation

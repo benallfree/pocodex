@@ -1,4 +1,5 @@
 import { dbg, error } from 'pocketbase-log'
+// @ts-ignore
 import { child_process, fs, path, process } from 'pocketbase-node'
 
 function getPackageManager() {
@@ -38,7 +39,7 @@ function installPackage(manager: string, packageName: string, link = false) {
     return
   }
 
-  dbg({ command })
+  dbg(`Running command: ${command.join(' ')}`)
   const output = child_process.execSync(command)
   return output
 }
