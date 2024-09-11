@@ -53,7 +53,7 @@ program
     new Command(`init`)
       .option(
         `-l, --link`,
-        `Use a link: prefix when installing (for local development)`,
+        `Use a link: prefix when installing (for local development)`
       )
       .action(({ link }) => {
         installPackage(getPackageManager(), `pocodex`, link ? 'link:' : '')
@@ -73,7 +73,7 @@ program
         })
 
         console.log(`pocodex installed`)
-      }),
+      })
   )
   .addCommand(
     new Command(`build`).action(async () => {
@@ -96,17 +96,14 @@ program
         // noExternal: [/.*/],
         splitting: false,
       })
-    }),
+    })
   )
   .addCommand(
     new Command(`watch`).action(async () => {
       console.log(`starting to build`)
       await build({
         format: ['cjs'],
-        entry: {
-          plugin: 'src/plugin.js',
-          main: 'src/main.js',
-        },
+        entry: globSync(`src/*.{js,ts}`),
         shims: true,
         skipNodeModulesBundle: true,
         clean: false,
@@ -120,7 +117,7 @@ program
         // noExternal: [/.*/],
         splitting: false,
       })
-    }),
+    })
   )
 
 program.parseAsync(process.argv)

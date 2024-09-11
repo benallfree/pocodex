@@ -137,23 +137,35 @@ export const installPlugin = (
 }
 
 export const initPlugins = (dao: daos.Dao) => {
+  dbg(`Initializing plugins`)
   const result = arrayOf(
     new DynamicModel({
       key: '',
       value: {},
     })
-  ) as { key: string; value: string }[]
+  ) as { key: string; value: PluginMeta }[]
 
   try {
-    $app.dao().db().newQuery('SELECT key,value from pocodex').all(result)
+    dao.db().newQuery('SELECT key,value from pocodex').all(result)
 
-    result.forEach((record) => {
-      const pluginName = record.key
-      const meta = JSON.parse(record.value)
-      const plugin = loadPlugin($app.dao(), pluginName)
-      plugin.init($app.dao())
-      if (meta.migrations.length > 0) {
-        migrateUp($app.dao(), plugin)
+    dbg(`Fetching plugins`, { result })
+
+    const pluginMetas = result.map((record) => ({
+      key: record.key,
+      value: JSON.parse(stringify(record.value)),
+    }))
+
+    dbg(`Plugin metas`, { pluginMetas })
+
+    pluginMetas.forEach((record) => {
+      const { key, value } = record
+      dbg(`Initializing plugin ${key}`)
+      const plugin = loadPlugin($app.dao(), key)
+      dbg(`Loaded, calling init`)
+      plugin.init(dao)
+      migrateUp(dao, plugin)
+      dbg(`Running migrations`, value.migrations)
+      if (value.migrations.length > 0) {
       }
     })
   } catch (e) {
