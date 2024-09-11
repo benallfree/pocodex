@@ -1,9 +1,9 @@
-import { dbg, info } from 'pocketbase-log'
+import { dbg, log } from 'pocketbase-log'
 import { RootCommand } from './RootCommand'
 import { initPlugins } from './plugin/init'
 export * as log from 'pocketbase-log'
 
-info('Hello from pocodex CLI bootstrap')
+log('Hello from pocodex CLI bootstrap')
 
 export const Init = () => {
   const { rootCmd } = $app

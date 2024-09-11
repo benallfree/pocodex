@@ -1,7 +1,7 @@
 import { dbg, error, info } from 'pocketbase-log'
 import { getPackageManager, installPackage } from '../PackageManager'
 import { loadPlugin, loadPluginSafeMode } from './load'
-import { deletePluginMeta, getPluginMeta, initPluginMeta } from './meta'
+import { deletePluginMeta, hasPluginMeta, initPluginMeta } from './meta'
 import { migrateDown, migrateUp } from './migrate'
 import { deleteSettings } from './settings'
 
@@ -28,14 +28,14 @@ export const installPlugin = (
 
   try {
     dbg(`Checking for existing plugin meta`)
-    const meta = getPluginMeta($app.dao(), pluginName)
-    const shouldBlock = meta && !force
+    const hasMeta = hasPluginMeta(dao, pluginName)
+    const shouldBlock = hasMeta && !force
 
     if (shouldBlock) {
       error(`Plugin ${pluginName} already installed. Use --force to reinstall.`)
       return
     }
-    uninstallPlugin($app.dao(), pluginName)
+    uninstallPlugin(dao, pluginName)
   } catch (e) {
     dbg(`Did not find plugin meta for ${pluginName}`)
   }

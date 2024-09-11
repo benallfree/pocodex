@@ -20,9 +20,12 @@ export const loadPluginSafeMode = (txDao: daos.Dao, pluginName: string) => {
       down,
     }),
     log,
-    store: (key, updater) => {
+    store: (key, updater, creator) => {
       if (updater) {
-        return setSetting(txDao, pluginName, `setting`, key, updater)
+        if (!creator) {
+          throw new Error(`Updating the store requires a creator function`)
+        }
+        return setSetting(txDao, pluginName, `setting`, key, updater, creator)
       } else {
         return getSetting(txDao, pluginName, `setting`, key)
       }

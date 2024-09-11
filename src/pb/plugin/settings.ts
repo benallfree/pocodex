@@ -1,20 +1,22 @@
 import { WritableDraft, produce } from 'immer'
 import { dbg } from 'pocketbase-log'
 import { stringify } from 'pocketbase-stringify'
-import { PartialDeep as Untrusted } from 'type-fest'
 
-export type UntrustedSettingsUpdater<T> = (
-  value: WritableDraft<Untrusted<T>>
-) => void
-export type TrustedSettingsUpdater<T> = (value: WritableDraft<T>) => void
+export type SettingsCreator<T> = () => T
+export type SettingsUpdater<T> = (value: WritableDraft<T>) => void
 
 export const getSetting = <T>(
   dao: daos.Dao,
   owner: string,
   type?: string,
-  key?: string
-): Untrusted<T> | null => {
-  return getSettings<T>(dao, owner, type, key)[0]?.value ?? null
+  key?: string,
+  defaultValue?: SettingsCreator<T>
+): T | null => {
+  const setting =
+    getSettings<T>(dao, owner, type, key)[0]?.value ??
+    (defaultValue?.() || null)
+  dbg(`Fetched setting ${owner}:${type}:${key}`, { setting })
+  return setting
 }
 
 export const getSettings = <T>(
@@ -22,7 +24,7 @@ export const getSettings = <T>(
   owner: string,
   type?: string,
   key?: string
-): { owner: string; type: string; key: string; value: Untrusted<T> }[] => {
+): { owner: string; type: string; key: string; value: T }[] => {
   const expressions = [$dbx.exp(`owner = {:owner}`, { owner })]
   if (type) {
     expressions.push($dbx.exp(`type = {:type}`, { type }))
@@ -31,7 +33,7 @@ export const getSettings = <T>(
     expressions.push($dbx.exp(`key = {:key}`, { key }))
   }
   const records = dao.findRecordsByExpr('pocodex', ...expressions)
-  dbg(`Fetched setting ${owner}:${type}:${key}`, { records })
+  dbg(`Fetched settings ${owner}:${type}:${key}`, { records })
 
   return records
     .filter((r): r is models.Record => !!r)
@@ -39,7 +41,7 @@ export const getSettings = <T>(
       owner: record.get(`owner`),
       type: record.get(`type`),
       key: record.get(`key`),
-      value: record.get(`value`),
+      value: JSON.parse(record.get(`value`)) as T,
     }))
 }
 
@@ -48,38 +50,47 @@ export const setSetting = <T>(
   owner: string,
   type: string,
   key: string,
-  updater: UntrustedSettingsUpdater<T>
+  updater: SettingsUpdater<T>,
+  creator: SettingsCreator<T>
 ) => {
-  let finalValue = null as Untrusted<T>
-  dao.runInTransaction(() => {
+  let finalValue = null as T
+  dao.runInTransaction((txDao) => {
     try {
-      dbg(`Attempting to update setting ${type}:${key}`)
-      const record = dao.findFirstRecordByFilter(
+      dbg(`Attempting to update setting ${owner}:${type}:${key}`)
+      const record = txDao.findFirstRecordByFilter(
         'pocodex',
         'owner = {:owner} && type = {:type} && key = {:key}',
         { owner, type, key }
       )
-      record.set('value', produce(record.get('value'), updater))
-      dao.saveRecord(record)
-      finalValue = record.get('value') as Untrusted<T>
-      dbg(`Updated setting ${type}:${key}`, { record })
+      dbg(`Found setting ${owner}:${type}:${key}`, { record })
+      const newValue = produce(JSON.parse(record.get('value')) as T, updater)
+      dbg(`Updating setting ${owner}:${type}:${key}`, {
+        oldValue: record,
+        newValue,
+      })
+      record.set('value', stringify(newValue))
+      txDao.saveRecord(record)
+      finalValue = newValue as T
+      dbg(`Updated setting ${owner}:${type}:${key}`, { record })
     } catch (e) {
-      // Record does not exist, create it
-      dbg(`Setting failed to update ${type}:${key}`, e)
-      dbg(`Setting not found ${type}:${key}, creating it`)
+      if (!`${e}`.match(/no rows/)) {
+        throw e
+      }
+      dbg(`Creating setting ${owner}:${type}:${key}`)
       try {
-        const collection = $app.dao().findCollectionByNameOrId('pocodex')
+        const collection = txDao.findCollectionByNameOrId('pocodex')
 
+        const newValue = produce(creator(), updater)
         const record = new Record(collection, {
           owner,
           type,
           key,
-          value: stringify(produce({}, updater)),
+          value: stringify(newValue),
         })
 
-        dao.saveRecord(record)
+        txDao.saveRecord(record)
         dbg(`Created setting ${owner}:${type}:${key}`, { record })
-        finalValue = record.get('value') as Untrusted<T>
+        finalValue = newValue
       } catch (e) {
         dbg(`Error saving setting ${owner}:${type}:${key}`, e)
       }
@@ -104,7 +115,7 @@ export const deleteSettings = (
     }
     dbg(`Deleting settings ${owner}:${type}:${key}`)
     const records = dao.findRecordsByExpr('pocodex', ...expressions)
-    dao.runInTransaction(() => {
+    dao.runInTransaction((txDao) => {
       records
         .filter((r): r is models.Record => !!r)
         .forEach((record) => {
@@ -112,13 +123,14 @@ export const deleteSettings = (
             `Deleting setting ${record.get('owner')}:${record.get('type')}:${record.get('key')}`
           )
           try {
-            dao.deleteRecord(record)
+            txDao.deleteRecord(record)
           } catch (e) {
             dbg(`Error deleting setting ${owner}:${type}:${key}: ${e}`)
             dbg(e)
           }
         })
     })
+    dbg(`Deleted settings ${owner}:${type}:${key}`)
   } catch (e) {
     dbg(`Error deleting setting ${owner}:${type}:${key}: ${e}`)
     dbg(e)

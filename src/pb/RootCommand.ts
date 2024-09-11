@@ -1,12 +1,12 @@
-import { InstallCommand } from './InstallCommand'
-import { EnableCommand } from './EnableCommand'
 import { DisableCommand } from './DisableCommand'
-import { UninstallCommand } from './UninstallCommand'
+import { EnableCommand } from './EnableCommand'
+import { InstallCommand } from './InstallCommand'
 import { ListCommand } from './ListCommand'
+import { UninstallCommand } from './UninstallCommand'
 
 export const RootCommand = () => {
   const cmd = new Command({
-    use: 'pocodex',
+    use: 'x',
     short:
       'pocodex, the unofficial PocketBase Code Exchange: plugins, starter kits, and more',
   })

@@ -1,12 +1,11 @@
-import { dbg, warn } from 'pocketbase-log'
+import { log } from 'pocketbase-log'
+
 try {
-  dbg(`pocodex bootstrap`)
-  dbg(`loading CLI`)
+  log(`pocodex bootstrap`)
+  log(`loading CLI`)
   require('pocodex/dist/pb').Init()
-  dbg('pocodex loaded')
+  log('pocodex loaded')
 } catch (e) {
-  warn(`WARNING: pocodex not loaded: ${e}`)
-  if (e instanceof Error) {
-    warn(e.stack)
-  }
+  log(`WARNING: pocodex not loaded: ${e}`)
+  log(e)
 }

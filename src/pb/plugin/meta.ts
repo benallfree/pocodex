@@ -1,8 +1,7 @@
-import { WritableDraft } from 'immer'
 import { dbg } from 'pocketbase-log'
 import { PluginConfigured, PluginMeta } from '../../types'
 import {
-  TrustedSettingsUpdater,
+  SettingsUpdater,
   deleteSettings,
   getSetting,
   getSettings,
@@ -13,26 +12,34 @@ export const getPluginMetas = (dao: daos.Dao) => {
   return getSettings<PluginMeta>(dao, `pocodex`, `meta`)
 }
 
-export const getPluginMeta = (dao: daos.Dao, name: string) => {
-  return getSetting<PluginMeta>(dao, `pocodex`, `meta`, name)
+export const hasPluginMeta = (dao: daos.Dao, name: string) => {
+  return !!getSetting<PluginMeta>(dao, `pocodex`, `meta`, name)
 }
+
+export const getPluginMeta = (dao: daos.Dao, name: string) => {
+  return getSetting<PluginMeta>(
+    dao,
+    `pocodex`,
+    `meta`,
+    name,
+    newPluginMeta
+  ) as PluginMeta
+}
+
+export const newPluginMeta = (): PluginMeta => ({ migrations: [] })
 
 export const setPluginMeta = (
   dao: daos.Dao,
   plugin: PluginConfigured,
-  update: TrustedSettingsUpdater<PluginMeta>
+  update: SettingsUpdater<PluginMeta>
 ) => {
   setSetting<PluginMeta>(
     dao,
     `pocodex`,
     `plugin`,
     plugin.name,
-    (untrustedMeta) => {
-      if (!untrustedMeta.migrations) {
-        untrustedMeta.migrations = []
-      }
-      update(untrustedMeta as WritableDraft<PluginMeta>)
-    }
+    update,
+    newPluginMeta
   )
 }
 
@@ -42,7 +49,12 @@ export const deletePluginMeta = (dao: daos.Dao, pluginName: string) => {
 
 export const initPluginMeta = (dao: daos.Dao, name: string) => {
   dbg(`Initializing plugin meta for ${name}`)
-  setSetting<PluginMeta>(dao, `pocodex`, `plugin`, name, (currentValue) => {
-    return { migrations: [] }
-  })
+  setSetting<PluginMeta>(
+    dao,
+    `pocodex`,
+    `plugin`,
+    name,
+    (v) => v,
+    newPluginMeta
+  )
 }

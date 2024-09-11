@@ -1,4 +1,4 @@
-import { forEach } from '@s-libs/micro-dash'
+import { forEach, keys } from '@s-libs/micro-dash'
 import { dbg, warn } from 'pocketbase-log'
 import { PluginConfigured } from '../../types'
 import { getPluginMeta, setPluginMeta } from './meta'
@@ -8,10 +8,11 @@ export const migrateUp = (dao: daos.Dao, plugin: PluginConfigured) => {
   const value = getPluginMeta(dao, plugin.name)
   const migrations = plugin.migrations()
 
-  dbg(`Found migrations`, migrations)
+  dbg(`Found migrations:`, keys(migrations))
   forEach(plugin.migrations(), (migration, name) => {
     dbg(`Checking migration ${name}`)
-    if (value?.migrations?.includes(name)) {
+    if (value.migrations.includes(name)) {
+      dbg(`Skipping migration ${name} because it has already been applied`)
       return
     }
     dbg(`Running migration ${name}`)
@@ -20,6 +21,7 @@ export const migrateUp = (dao: daos.Dao, plugin: PluginConfigured) => {
       migration.up(txDao.db())
       dbg(`Updating meta with migration ${name}`)
       setPluginMeta(txDao, plugin, (meta) => {
+        dbg(`Adding migration ${name} to meta`, { meta })
         meta.migrations.push(name)
       })
     })

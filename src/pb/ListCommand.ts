@@ -4,7 +4,7 @@ export const ListCommand = () => {
   let listGlobal = false
   const listCommand = new Command({
     use: `list`,
-    short: 'ls',
+    short: 'List plugins (local and global)',
 
     run: (cmd, args) => {
       dbg(`Hello from pocodex list command!`, { listGlobal })
