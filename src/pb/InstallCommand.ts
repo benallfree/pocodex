@@ -1,5 +1,5 @@
 import { dbg, error } from 'pocketbase-log'
-import { installPlugin } from './plugin-helpers'
+import { installPlugin } from './plugin/install'
 
 export const InstallCommand = () => {
   const cmd = new Command({
@@ -33,7 +33,7 @@ export const InstallCommand = () => {
     .bool(
       'force',
       false,
-      'Reinstall plugin, deleting existing plugin meta and migrations',
+      'Reinstall plugin, deleting existing plugin meta and migrations'
     )
 
   return cmd

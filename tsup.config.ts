@@ -30,7 +30,7 @@ export default defineConfig({
   target: 'node20',
   platform: 'node',
   minify: true,
-  sourcemap: true,
+  sourcemap: 'inline',
   bundle: true,
   // https://github.com/egoist/tsup/issues/619
   noExternal: [/^pocketbase-/, 'immer', '@s-libs/micro-dash'],

@@ -9,6 +9,20 @@ migrate(
       schema: [
         {
           system: false,
+          id: 'avyam89v',
+          name: 'owner',
+          type: 'text',
+          required: false,
+          presentable: false,
+          unique: false,
+          options: {
+            min: null,
+            max: null,
+            pattern: '',
+          },
+        },
+        {
+          system: false,
           id: 'adbqji6s',
           name: 'type',
           type: 'text',
@@ -49,9 +63,9 @@ migrate(
         },
       ],
       indexes: [
-        'CREATE UNIQUE INDEX `idx_ZXzaX03` ON `pocodex` (`key`)',
-        'CREATE INDEX `idx_3GHTqQ4` ON `pocodex` (`type`)',
-        'CREATE INDEX `idx_qdpyrxk` ON `pocodex` (\n  `type`,\n  `key`\n)',
+        'CREATE UNIQUE INDEX `idx_5XsQQRe` ON `pocodex` (\n  `owner`,\n  `type`,\n  `key`\n)',
+        'CREATE INDEX `idx_jRx0x6O` ON `pocodex` (`owner`)',
+        'CREATE INDEX `idx_MQTYsG2` ON `pocodex` (\n  `owner`,\n  `type`\n)',
       ],
       listRule: null,
       viewRule: null,
