@@ -173,9 +173,4 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
-test/pb_data
-test/pb_hooks
-test/pb_migrations
-tests/otp/pb_data
-tests/otp/pb_hooks
-tests/otp/pb_migrations
+tests/**/pb_*
