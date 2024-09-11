@@ -7,7 +7,7 @@ const files = [`pb_hooks`, `pb_migrations`]
       console.log({ file })
       acc[file.slice(0, -3)] = `src/${file}`
       return acc
-    }, {}),
+    }, {})
   )
   .reduce((acc, obj) => ({ ...acc, ...obj }), {})
 
@@ -29,11 +29,11 @@ export default defineConfig({
   clean: false,
   target: 'node20',
   platform: 'node',
-  minify: false,
-  sourcemap: 'inline',
+  minify: true,
+  sourcemap: true,
   bundle: true,
   // https://github.com/egoist/tsup/issues/619
-  noExternal: [/^pocketbase-/],
+  noExternal: [/^pocketbase-/, 'immer', '@s-libs/micro-dash'],
   splitting: false,
   onSuccess: `cp src/*.d.ts dist && cp -r src/pb_migrations dist`,
 })

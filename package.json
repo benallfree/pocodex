@@ -37,12 +37,15 @@
     "typescript": "^5.6.2"
   },
   "devDependencies": {
+    "@s-libs/micro-dash": "^18.0.0",
     "@types/node": "^22.5.4",
+    "immer": "^10.1.1",
     "pocketbase-log": "link:pocketbase-log",
     "pocketbase-node": "link:pocketbase-node",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "type-fest": "^4.26.1"
   },
   "prettier": {
     "semi": false,

@@ -14,7 +14,7 @@ export type Plugin = {
   install(dao: daos.Dao): void
   uninstall(dao: daos.Dao): void
   files(dao: daos.Dao): Record<string, string>
-  migrations(dao: daos.Dao): { [migrationName: string]: MigrationSet }
+  migrations(): { [migrationName: string]: MigrationSet }
 }
 export type PluginConfigured = Plugin & { name: string }
 

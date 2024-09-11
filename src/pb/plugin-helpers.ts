@@ -1,9 +1,60 @@
+import { forEach } from '@s-libs/micro-dash'
+import { WritableDraft } from 'immer'
 import * as log from 'pocketbase-log'
-import { dbg, error, info } from 'pocketbase-log'
-import { stringify } from 'pocketbase-stringify'
+import { dbg, error, info, warn } from 'pocketbase-log'
 import { PluginConfigured, PluginFactory, PluginMeta } from '../types'
-import { migrateDown, migrateUp } from './migrateUp'
 import { getPackageManager, installPackage } from './PackageManager'
+import {
+  TrustedSettingsUpdater,
+  deleteSetting,
+  getSetting,
+  getSettings,
+  setSetting,
+} from './settings'
+
+export const migrateUp = (dao: daos.Dao, plugin: PluginConfigured) => {
+  dbg(`Running up migrations for plugin ${plugin.name}`)
+  const value = getPluginMeta(dao, plugin.name)
+  const migrations = plugin.migrations()
+
+  dbg(`Found migrations`, migrations)
+  forEach(plugin.migrations(), (migration, name) => {
+    dbg(`Checking migration ${name}`)
+    if (value?.migrations?.includes(name)) {
+      return
+    }
+    dbg(`Running migration ${name}`)
+    dao.runInTransaction((txDao) => {
+      dbg(`Running up migration ${name}`)
+      migration.up(txDao.db())
+      dbg(`Updating meta with migration ${name}`)
+      updatePluginMeta(txDao, plugin, (meta) => {
+        meta.migrations.push(name)
+      })
+    })
+  })
+}
+
+export const migrateDown = (dao: daos.Dao, plugin: PluginConfigured) => {
+  dbg(`Running down migrations for plugin ${plugin.name}`)
+  const meta = getPluginMeta(dao, plugin.name)
+  const migrations = plugin.migrations()
+
+  meta?.migrations?.reverse().forEach((name) => {
+    const migration = migrations[name]
+    if (!migration) {
+      warn(`Migration ${name} not found - skipping downgrade`)
+    }
+    dbg(`Running down migration ${name}`)
+    dao.runInTransaction((txDao) => {
+      migration!.down(txDao.db())
+      dbg(`Removing migration  ${name} from meta`)
+      updatePluginMeta(txDao, plugin, (meta) => {
+        meta.migrations = meta.migrations.filter((m) => m !== name)
+      })
+    })
+  })
+}
 
 export const loadPlugin = (txDao: daos.Dao, pluginName: string) => {
   const configuredModule = loadPluginSafeMode(txDao, pluginName)
@@ -31,58 +82,39 @@ export const loadPluginSafeMode = (txDao: daos.Dao, pluginName: string) => {
   return configuredModule
 }
 
-export const initPluginMeta = (dao: daos.Dao, name: string, force = false) => {
+export const initPluginMeta = (dao: daos.Dao, name: string) => {
   dbg(`Initializing plugin meta for ${name}`)
-  const collection = dao.findCollectionByNameOrId('pocodex')
-  const meta: PluginMeta = { migrations: [] }
-  const record = new Record(collection, {
-    key: name,
-    value: meta,
+  setSetting<PluginMeta>(dao, `plugin.meta`, name, (currentValue) => {
+    return { migrations: [] }
   })
-  dbg(`Saving plugin meta for ${name}`, record)
-  dao.saveRecord(record)
 }
 
 export const updatePluginMeta = (
   dao: daos.Dao,
   plugin: PluginConfigured,
-  update: (meta: PluginMeta) => PluginMeta
+  update: TrustedSettingsUpdater<PluginMeta>
 ) => {
-  const { name } = plugin
-  dbg(`Updating plugin meta for ${name}`)
-  const record = dao.findFirstRecordByData('pocodex', 'key', name)
-  if (!record) {
-    throw new Error(`Plugin meta not found for ${name}`)
-  }
-  const updatedMeta = update(JSON.parse(record.get(`value`)))
-  dbg(`Updated meta`, { updatedMeta })
-  record.set(`value`, stringify(updatedMeta))
-  dbg(`Saving plugin meta for ${name}`)
-  dao.saveRecord(record)
+  setSetting<PluginMeta>(dao, `plugin.meta`, plugin.name, (untrustedMeta) => {
+    if (!untrustedMeta.migrations) {
+      untrustedMeta.migrations = []
+    }
+    update(untrustedMeta as WritableDraft<PluginMeta>)
+  })
 }
 
-export const getPluginMeta = (dao: daos.Dao, name: string): PluginMeta => {
-  dbg(`Getting plugin meta for ${name}`)
-  const record = dao.findFirstRecordByData('pocodex', 'key', name)
-  dbg(`Found record`, { record })
-  if (!record) {
-    throw new Error(`Plugin meta not found for ${name}`)
-  }
-  return JSON.parse(record.get(`value`))
+export const getPluginMeta = (dao: daos.Dao, name: string) => {
+  return getSetting<PluginMeta>(dao, `plugin.meta`, name)
 }
 
 export const deletePluginMeta = (dao: daos.Dao, pluginName: string) => {
-  dbg(`Deleting plugin meta for ${pluginName}`)
-  const record = dao.findFirstRecordByData('pocodex', 'key', pluginName)
-  dbg(`Found record`, { record })
-  dao.deleteRecord(record)
-  dbg(`Deleted plugin meta for ${pluginName}`)
+  deleteSetting(dao, `plugin.meta`, pluginName)
 }
 
 export const uninstallPlugin = (dao: daos.Dao, pluginName: string) => {
+  const plugin = loadPluginSafeMode(dao, pluginName)
   dao.runInTransaction((txDao) => {
-    migrateDown(txDao, pluginName)
-    deletePluginMeta(txDao, pluginName)
+    migrateDown(txDao, plugin)
+    deletePluginMeta(txDao, plugin.name)
   })
 }
 
@@ -100,13 +132,7 @@ export const installPlugin = (
     dbg(`Checking for existing plugin meta`)
     const meta = getPluginMeta($app.dao(), pluginName)
     const shouldBlock = meta && !force
-    dbg(`Plugin meta found`, {
-      meta: !!meta,
-      force: force,
-      notForce: !force,
-      forceType: typeof force,
-      shouldBlock,
-    })
+
     if (shouldBlock) {
       error(`Plugin ${pluginName} already installed. Use --force to reinstall.`)
       return
@@ -138,22 +164,10 @@ export const installPlugin = (
 
 export const initPlugins = (dao: daos.Dao) => {
   dbg(`Initializing plugins`)
-  const result = arrayOf(
-    new DynamicModel({
-      key: '',
-      value: {},
-    })
-  ) as { key: string; value: PluginMeta }[]
 
   try {
-    dao.db().newQuery('SELECT key,value from pocodex').all(result)
-
-    dbg(`Fetching plugins`, { result })
-
-    const pluginMetas = result.map((record) => ({
-      key: record.key,
-      value: JSON.parse(stringify(record.value)),
-    }))
+    dbg(`Getting plugin metas`)
+    const pluginMetas = getSettings<PluginMeta>(dao, `plugin.meta`)
 
     dbg(`Plugin metas`, { pluginMetas })
 
@@ -164,11 +178,11 @@ export const initPlugins = (dao: daos.Dao) => {
       dbg(`Loaded, calling init`)
       plugin.init(dao)
       migrateUp(dao, plugin)
-      dbg(`Running migrations`, value.migrations)
-      if (value.migrations.length > 0) {
-      }
     })
   } catch (e) {
     error(`Failed to initialize plugins: ${e}`)
+    if (e instanceof Error) {
+      error(e.stack)
+    }
   }
 }
