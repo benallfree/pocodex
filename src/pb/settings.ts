@@ -51,6 +51,7 @@ export const setSetting = <T>(
   key: string,
   updater: UntrustedSettingsUpdater<T>
 ) => {
+  let finalValue = null as Untrusted<T>
   dao.runInTransaction(() => {
     try {
       const record = dao.findFirstRecordByFilter(
@@ -60,6 +61,7 @@ export const setSetting = <T>(
       )
       record.set('value', produce(record.get('value'), updater))
       dao.saveRecord(record)
+      finalValue = record.get('value') as Untrusted<T>
     } catch (e) {
       // Record does not exist, create it
       try {
@@ -72,6 +74,7 @@ export const setSetting = <T>(
         })
 
         dao.saveRecord(record)
+        finalValue = record.get('value') as Untrusted<T>
       } catch (e) {
         dbg(`Error saving setting ${type}:${key}: ${e}`)
         if (e instanceof Error) {
@@ -80,6 +83,7 @@ export const setSetting = <T>(
       }
     }
   })
+  return finalValue
 }
 
 export const deleteSetting = (dao: daos.Dao, type: string, key: string) => {

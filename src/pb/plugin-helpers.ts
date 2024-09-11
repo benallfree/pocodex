@@ -74,6 +74,13 @@ export const loadPluginSafeMode = (txDao: daos.Dao, pluginName: string) => {
       down,
     }),
     log,
+    store: (key, updater) => {
+      if (updater) {
+        return setSetting(txDao, `settings.${pluginName}`, key, updater)
+      } else {
+        return getSetting(txDao, `settings.${pluginName}`, key)
+      }
+    },
   })
   const configuredModule: PluginConfigured = {
     name: pluginName,

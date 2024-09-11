@@ -1,12 +1,18 @@
 /// <reference types="./jsvm" />
 /// <reference types="./jsvm-extra" />
 import * as log from 'pocketbase-log'
+import { PartialDeep } from 'type-fest'
+import { UntrustedSettingsUpdater } from './pb/settings'
 
 export type MigrationFunction = (db: dbx.Builder) => void
 export type MigrationSet = { up: MigrationFunction; down: MigrationFunction }
 export type PluginConfig = {
   migrate: (up: MigrationFunction, down: MigrationFunction) => MigrationSet
   log: typeof log
+  store: <T>(
+    key: string,
+    updater?: UntrustedSettingsUpdater<T>
+  ) => PartialDeep<T> | null
 }
 
 export type Plugin = {
