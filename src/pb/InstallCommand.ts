@@ -10,26 +10,21 @@ export const InstallCommand = () => {
       logo()
 
       const force = cmd.flag(`force`).value.toString() === 'true'
-      const link = cmd.flag(`link`).value.toString() === 'true'
 
-      dbg(`Running install command`, { args, link, force, isForce: !!force })
+      dbg(`Running install command`, { args, force, isForce: !!force })
 
-      const pluginName = args.shift()
-      if (!pluginName) {
-        log('Plugin name is required')
+      const packageSpec = args.shift()
+      if (!packageSpec) {
+        log('Plugin npm package name is required')
         return
       }
-      log(`Installing plugin ${pluginName}`)
-      dbg({ args, link, force })
+      log(`Installing plugin ${packageSpec}`)
+      dbg({ args, force })
 
-      installPlugin($app.dao(), pluginName, link, force)
+      installPlugin($app.dao(), packageSpec, force)
     },
   })
 
-  cmd
-    .flags()
-    .boolP('link', 'l', false, 'Use link: prefix for local development') ===
-    'boolean'
   cmd
     .flags()
     .bool(

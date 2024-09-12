@@ -21,8 +21,8 @@ function getPackageManager() {
   return `npm` // No lock file found
 }
 
-function installPackage(manager: string, packageName: string, link = false) {
-  const finalPackageName = `${packageName}${link ? `@link:${packageName}` : ''}`
+function installPackage(manager: string, packageSpec: string) {
+  const finalPackageName = packageSpec
   const command =
     manager === 'npm'
       ? `npm install ${finalPackageName}`.split(' ')

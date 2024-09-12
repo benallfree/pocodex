@@ -18,11 +18,11 @@ export const uninstallPlugin = (dao: daos.Dao, pluginName: string) => {
 
 export const installPlugin = (
   dao: daos.Dao,
-  pluginName: string,
-  link: boolean,
+  packageSpec: string,
   force: boolean
 ) => {
-  dbg(`Installing plugin ${pluginName}`)
+  const pluginName = packageSpec.split('@')[0]!
+  dbg(`Installing plugin ${packageSpec}`)
 
   const packageManager = getPackageManager()
 
@@ -43,7 +43,7 @@ export const installPlugin = (
   try {
     dao.runInTransaction((txDao) => {
       try {
-        const output = installPackage(packageManager, pluginName, link)
+        const output = installPackage(packageManager, packageSpec)
         log(output)
       } catch (e) {
         log(`Failed to install package ${pluginName}: ${e}`)

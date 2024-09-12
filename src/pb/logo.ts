@@ -13,7 +13,9 @@ export const logo = () => {
 |_|                      pocodex v${version}               
 
 the unofficial PocketBase Code Exchange
-    plugins, starter kits, and more
+   ~plugins, starter kits, and more~
+
+          https://pocodex.dev
                         
   `
   log(logo)
