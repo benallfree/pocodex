@@ -8,6 +8,7 @@ export const loadPlugin = (txDao: daos.Dao, pluginName: string) => {
   return configuredModule
 }
 
+const PLUGIN_STORE_RECORD_TYPE = `setting`
 export const loadPluginSafeMode = (txDao: daos.Dao, pluginName: string) => {
   const module = require(`${pluginName}/dist/plugin`)
   const factory = (module.default || module.plugin || module) as PluginFactory
@@ -25,9 +26,16 @@ export const loadPluginSafeMode = (txDao: daos.Dao, pluginName: string) => {
         if (!creator) {
           throw new Error(`Updating the store requires a creator function`)
         }
-        return setSetting(txDao, pluginName, `setting`, key, updater, creator)
+        return setSetting(
+          txDao,
+          pluginName,
+          PLUGIN_STORE_RECORD_TYPE,
+          key,
+          updater,
+          creator
+        )
       } else {
-        return getSetting(txDao, pluginName, `setting`, key)
+        return getSetting(txDao, pluginName, PLUGIN_STORE_RECORD_TYPE, key)
       }
     },
   })

@@ -8,19 +8,27 @@ import {
   setSetting,
 } from './settings'
 
+export const POCODEX_OWNER = `pocodex`
+export const RECORD_TYPE_PLUGIN_META = `plugin`
+
 export const getPluginMetas = (dao: daos.Dao) => {
-  return getSettings<PluginMeta>(dao, `pocodex`, `meta`)
+  return getSettings<PluginMeta>(dao, POCODEX_OWNER, RECORD_TYPE_PLUGIN_META)
 }
 
 export const hasPluginMeta = (dao: daos.Dao, name: string) => {
-  return !!getSetting<PluginMeta>(dao, `pocodex`, `meta`, name)
+  return !!getSetting<PluginMeta>(
+    dao,
+    POCODEX_OWNER,
+    RECORD_TYPE_PLUGIN_META,
+    name
+  )
 }
 
 export const getPluginMeta = (dao: daos.Dao, name: string) => {
   return getSetting<PluginMeta>(
     dao,
-    `pocodex`,
-    `meta`,
+    POCODEX_OWNER,
+    RECORD_TYPE_PLUGIN_META,
     name,
     newPluginMeta
   ) as PluginMeta
@@ -35,8 +43,8 @@ export const setPluginMeta = (
 ) => {
   setSetting<PluginMeta>(
     dao,
-    `pocodex`,
-    `plugin`,
+    POCODEX_OWNER,
+    RECORD_TYPE_PLUGIN_META,
     plugin.name,
     update,
     newPluginMeta
@@ -44,15 +52,15 @@ export const setPluginMeta = (
 }
 
 export const deletePluginMeta = (dao: daos.Dao, pluginName: string) => {
-  deleteSettings(dao, `pocodex`, `meta`, pluginName)
+  deleteSettings(dao, POCODEX_OWNER, RECORD_TYPE_PLUGIN_META, pluginName)
 }
 
 export const initPluginMeta = (dao: daos.Dao, name: string) => {
   dbg(`Initializing plugin meta for ${name}`)
   setSetting<PluginMeta>(
     dao,
-    `pocodex`,
-    `plugin`,
+    POCODEX_OWNER,
+    RECORD_TYPE_PLUGIN_META,
     name,
     (v) => v,
     newPluginMeta

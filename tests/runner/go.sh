@@ -11,3 +11,4 @@ pocketbase migrate
 pocketbase x  --dev
 pocketbase x install pocketbase-otp@link:pocketbase-otp --dev
 ls -lah node_modules
+pocketbase x install pocketbase-otp@link:pocketbase-otp --dev
