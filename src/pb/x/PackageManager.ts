@@ -34,8 +34,7 @@ function installPackage(manager: string, packageSpec: string) {
             : null
 
   if (!command) {
-    log('Unsupported package manager')
-    return
+    throw new Error('Unsupported package manager')
   }
 
   log(`Running command: ${command.join(' ')}`)
@@ -43,4 +42,26 @@ function installPackage(manager: string, packageSpec: string) {
   return output
 }
 
-export { getPackageManager, installPackage }
+function uninstallPackage(manager: string, packageName: string) {
+  const finalPackageName = packageName
+  const command =
+    manager === 'npm'
+      ? `npm remove ${finalPackageName}`.split(' ')
+      : manager === 'yarn'
+        ? `yarn remove ${finalPackageName}`.split(' ')
+        : manager === 'pnpm'
+          ? `pnpm remove ${finalPackageName}`.split(' ')
+          : manager === 'bun'
+            ? `bun remove ${finalPackageName}`.split(' ')
+            : null
+
+  if (!command) {
+    throw new Error('Unsupported package manager')
+  }
+
+  log(`Running command: ${command.join(' ')}`)
+  const output = child_process.execSync(command)
+  return output
+}
+
+export { getPackageManager, installPackage, uninstallPackage }

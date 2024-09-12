@@ -2,22 +2,10 @@ import { forEach } from '@s-libs/micro-dash'
 import { dbg, error, log } from 'pocketbase-log'
 import { fs, path } from 'pocketbase-node'
 import { getPackageManager, installPackage } from '../PackageManager'
-import { loadPlugin, loadPluginSafeMode } from './load'
-import { deletePluginMeta, hasPluginMeta, initPluginMeta } from './meta'
-import { migrateDown, migrateUp } from './migrate'
-import { deleteSettings } from './settings'
-
-export const uninstallPlugin = (dao: daos.Dao, pluginName: string) => {
-  const plugin = loadPluginSafeMode(dao, pluginName)
-  dao.runInTransaction((txDao) => {
-    log(`Migrating down plugin ${plugin.name}`)
-    migrateDown(txDao, plugin)
-    log(`Deleting plugin meta for ${plugin.name}`)
-    deletePluginMeta(txDao, plugin.name)
-    log(`Deleting settings owned by ${plugin.name}`)
-    deleteSettings(txDao, plugin.name)
-  })
-}
+import { loadPlugin } from './load'
+import { hasPluginMeta, initPluginMeta } from './meta'
+import { migrateUp } from './migrate'
+import { uninstallPlugin } from './uninstall'
 
 export const installPlugin = (
   dao: daos.Dao,
@@ -83,7 +71,7 @@ export const installPlugin = (
       try {
         log(plugin.files?.(txDao))
         forEach(plugin.files?.(txDao), (content, dst) => {
-          log(`Writing ${dst}`, content)
+          log(`Writing ${dst}`)
 
           fs.mkdirSync(path.dirname(dst))
           fs.writeFileSync(dst, content)

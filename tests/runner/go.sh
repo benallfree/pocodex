@@ -13,3 +13,4 @@ pocketbase x install pocketbase-otp@link:pocketbase-otp
 ls -lah node_modules
 pocketbase x install pocketbase-otp@link:pocketbase-otp
 pocketbase x install pocketbase-otp@link:pocketbase-otp --force
+pocketbase x uninstall pocketbase-otp
