@@ -1,5 +1,5 @@
 import * as log from 'pocketbase-log'
-import { PluginConfigured, PluginFactory } from '../../types'
+import { PluginConfigured, PluginFactory } from '../../../types'
 import { getSetting, setSetting } from './settings'
 
 export const loadPlugin = (txDao: daos.Dao, pluginName: string) => {

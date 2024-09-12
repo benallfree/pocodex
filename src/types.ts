@@ -1,7 +1,8 @@
-/// <reference types="./jsvm" />
-/// <reference types="./jsvm-extra" />
+import { WritableDraft } from 'immer'
 import * as log from 'pocketbase-log'
-import { SettingsCreator, SettingsUpdater } from './pb/plugin/settings'
+
+export type SettingsCreator<T> = () => T
+export type SettingsUpdater<T> = (value: WritableDraft<T>) => void
 
 export type MigrationFunction = (db: dbx.Builder) => void
 export type MigrationSet = { up: MigrationFunction; down: MigrationFunction }

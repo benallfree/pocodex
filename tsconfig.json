@@ -1,12 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "lib": ["ESNext"],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "noImplicitAny": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true
+    "typeRoots": [],
+    "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["./**/*.ts"]
 }

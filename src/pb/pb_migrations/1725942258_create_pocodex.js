@@ -1,4 +1,3 @@
-/// <reference path="../jsvm.d.ts" />
 migrate(
   (db) => {
     const collection = new Collection({

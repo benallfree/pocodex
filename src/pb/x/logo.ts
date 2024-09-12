@@ -1,5 +1,5 @@
 import { log } from 'pocketbase-log'
-import { version } from '../../package.json'
+import { version } from '../../../package.json'
 
 export const logo = () => {
   const logo = `

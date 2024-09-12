@@ -1,5 +1,4 @@
 import { log } from 'pocketbase-log'
-// @ts-ignore
 import { child_process, fs, path, process } from 'pocketbase-node'
 
 function getPackageManager() {

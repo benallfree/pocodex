@@ -1,12 +1,6 @@
 import { dbg } from 'pocketbase-log'
-import { PluginConfigured, PluginMeta } from '../../types'
-import {
-  SettingsUpdater,
-  deleteSettings,
-  getSetting,
-  getSettings,
-  setSetting,
-} from './settings'
+import { PluginConfigured, PluginMeta, SettingsUpdater } from '../../../types'
+import { deleteSettings, getSetting, getSettings, setSetting } from './settings'
 
 export const POCODEX_OWNER = `pocodex`
 export const RECORD_TYPE_PLUGIN_META = `plugin`

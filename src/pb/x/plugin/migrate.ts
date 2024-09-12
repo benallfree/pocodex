@@ -1,6 +1,6 @@
 import { forEach, keys } from '@s-libs/micro-dash'
 import { dbg, log, warn } from 'pocketbase-log'
-import { PluginConfigured } from '../../types'
+import { PluginConfigured } from '../../../types'
 import { getPluginMeta, setPluginMeta } from './meta'
 
 export const migrateUp = (dao: daos.Dao, plugin: PluginConfigured) => {

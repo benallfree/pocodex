@@ -1,35 +1,25 @@
-import { globSync } from 'glob'
 import { defineConfig } from 'tsup'
-
-const files = [`pb_hooks`, `pb_migrations`]
-  .map((pfx) =>
-    globSync(`${pfx}/*.js`, { cwd: `src` }).reduce((acc, file) => {
-      console.log({ file })
-      acc[file.slice(0, -3)] = `src/${file}`
-      return acc
-    }, {})
-  )
-  .reduce((acc, obj) => ({ ...acc, ...obj }), {})
 
 export default defineConfig({
   format: ['cjs'],
   entry: {
     index: 'src/index.ts',
-    pb: 'src/pb/index.ts',
-    cli: 'src/cli.ts',
-    [`pb_hooks/pocodex.pb`]: 'src/pb_hooks/pocodex.pb.ts',
+    pb: 'src/pb/x/index.ts',
+    cli: 'src/cli/index.ts',
+    [`pb_hooks/pocodex.pb`]: 'src/pb/pb_hooks/pocodex.pb.ts',
+    [`pb_migrations/1725942258_create_pocodex`]:
+      'src/pb/pb_migrations/1725942258_create_pocodex.js',
   },
   dts: {
     entry: ['./src/index.ts'],
     resolve: true,
-    banner: `/// <reference types="./jsvm" />\n/// <reference types="./jsvm-extra" />`,
   },
   shims: true,
   skipNodeModulesBundle: true,
   clean: false,
   target: 'node20',
   platform: 'node',
-  minify: true,
+  minify: false,
   sourcemap: 'inline',
   bundle: true,
   // https://github.com/egoist/tsup/issues/619

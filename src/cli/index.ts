@@ -6,7 +6,7 @@ import { copyFileSync, existsSync, mkdirSync } from 'fs'
 import { globSync } from 'glob'
 import { dirname, join } from 'path'
 import { build } from 'tsup'
-export * from './types'
+export * from '../types'
 
 function getPackageManager() {
   const lockFiles = {

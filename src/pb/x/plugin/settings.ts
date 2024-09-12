@@ -1,9 +1,7 @@
-import { WritableDraft, produce } from 'immer'
+import { produce } from 'immer'
 import { dbg } from 'pocketbase-log'
 import { stringify } from 'pocketbase-stringify'
-
-export type SettingsCreator<T> = () => T
-export type SettingsUpdater<T> = (value: WritableDraft<T>) => void
+import { SettingsCreator, SettingsUpdater } from '../../../types'
 
 export const getSetting = <T>(
   dao: daos.Dao,

@@ -1,4 +1,4 @@
-import { log } from 'console'
+import { log } from 'pocketbase-log'
 import { DisableCommand } from './DisableCommand'
 import { EnableCommand } from './EnableCommand'
 import { InstallCommand } from './InstallCommand'

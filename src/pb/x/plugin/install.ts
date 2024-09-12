@@ -1,6 +1,6 @@
 import { forEach } from '@s-libs/micro-dash'
 import { dbg, error, log } from 'pocketbase-log'
-import { writeFileSync } from 'pocketbase-node'
+import { fs } from 'pocketbase-node'
 import { getPackageManager, installPackage } from '../PackageManager'
 import { loadPlugin, loadPluginSafeMode } from './load'
 import { deletePluginMeta, hasPluginMeta, initPluginMeta } from './meta'
@@ -83,8 +83,8 @@ export const installPlugin = (
       try {
         log(plugin.files?.(txDao))
         forEach(plugin.files?.(txDao), (content, dst) => {
-          log(`Writing ${dst}`)
-          writeFileSync(dst, content)
+          log(`Writing ${dst}`, content)
+          fs.writeFileSync(dst, content)
         })
       } catch (e) {
         error(`Failed to copy files for plugin ${pluginName}: ${e}`)
