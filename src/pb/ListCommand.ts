@@ -1,4 +1,5 @@
-import { dbg } from 'pocketbase-log'
+import { log } from 'pocketbase-log'
+import { getPluginMetas } from './plugin/meta'
 
 export const ListCommand = () => {
   let listGlobal = false
@@ -7,7 +8,17 @@ export const ListCommand = () => {
     short: 'List plugins (local and global)',
 
     run: (cmd, args) => {
-      dbg(`Hello from pocodex list command!`, { listGlobal })
+      const plugins = getPluginMetas($app.dao())
+      log('Plugins:')
+
+      plugins.forEach((p) => {
+        log(p.key)
+      })
+      if (plugins.length === 0) {
+        log(
+          `\tNo pocodex plugins are installed.\n\tUse 'pocketbase x install ---help' to learn how to install plugins.`
+        )
+      }
     },
   })
   listCommand.flags().boolVar(listGlobal, 'global', 'g', 'List global plugins')
