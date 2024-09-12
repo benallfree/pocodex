@@ -1,6 +1,6 @@
 import { forEach } from '@s-libs/micro-dash'
 import { dbg, error, log } from 'pocketbase-log'
-import { fs } from 'pocketbase-node'
+import { fs, path } from 'pocketbase-node'
 import { getPackageManager, installPackage } from '../PackageManager'
 import { loadPlugin, loadPluginSafeMode } from './load'
 import { deletePluginMeta, hasPluginMeta, initPluginMeta } from './meta'
@@ -84,6 +84,8 @@ export const installPlugin = (
         log(plugin.files?.(txDao))
         forEach(plugin.files?.(txDao), (content, dst) => {
           log(`Writing ${dst}`, content)
+
+          fs.mkdirSync(path.dirname(dst))
           fs.writeFileSync(dst, content)
         })
       } catch (e) {
@@ -98,4 +100,5 @@ export const installPlugin = (
     )
     dbg(e)
   }
+  log(`Plugin ${pluginName} installed`)
 }
