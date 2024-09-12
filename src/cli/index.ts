@@ -2,10 +2,10 @@
 
 import { execSync } from 'child_process'
 import { Command, program } from 'commander'
-import { copyFileSync, existsSync, mkdirSync } from 'fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'fs'
 import { globSync } from 'glob'
 import { dirname, join } from 'path'
-import { build } from 'tsup'
+import { Options, build } from 'tsup'
 export * from '../types'
 
 function getPackageManager() {
@@ -27,16 +27,16 @@ function getPackageManager() {
   return `npm` // No lock file found
 }
 
-function installPackage(manager: string, packageName: string, link = '') {
+function installPackage(manager: string, packageName) {
   const command =
     manager === 'npm'
-      ? `npm install ${link}${packageName}`
+      ? `npm install ${packageName}`
       : manager === 'yarn'
-        ? `yarn add ${link}${packageName}`
+        ? `yarn add ${packageName}`
         : manager === 'pnpm'
-          ? `pnpm add ${link}${packageName}`
+          ? `pnpm add ${packageName}`
           : manager === 'bun'
-            ? `bun add ${link}${packageName}`
+            ? `bun add ${packageName}`
             : null
 
   if (!command) {
@@ -45,6 +45,26 @@ function installPackage(manager: string, packageName: string, link = '') {
 
   const output = execSync(command)
   return output
+}
+
+const PLUGIN_BUILD_CONFIG = (packageName: string): Options => {
+  const config: Options = {
+    format: ['cjs'],
+    entry: globSync(`src/*.{js,ts}`),
+    shims: true,
+    skipNodeModulesBundle: false,
+    clean: false,
+    target: 'node20',
+    platform: 'node',
+    minify: false,
+    sourcemap: 'inline',
+    bundle: true,
+    // https://github.com/egoist/tsup/issues/619
+    external: [packageName],
+    splitting: false,
+  }
+  console.log({ config })
+  return config
 }
 
 program
@@ -56,7 +76,10 @@ program
         `Use a link: prefix when installing (for local development)`
       )
       .action(({ link }) => {
-        installPackage(getPackageManager(), `pocodex`, link ? 'link:' : '')
+        installPackage(
+          getPackageManager(),
+          link ? `pocodex@link:pocodex` : `pocodex@latest`
+        )
 
         const PACKAGE_ROOT = (...paths: string[]) => join(__dirname, ...paths)
 
@@ -78,46 +101,15 @@ program
   .addCommand(
     new Command(`build`).action(async () => {
       console.log(`starting to build`)
-      await build({
-        format: ['cjs'],
-        entry: {
-          plugin: 'src/plugin.js',
-          main: 'src/main.js',
-        },
-        shims: true,
-        skipNodeModulesBundle: true,
-        clean: false,
-        target: 'node20',
-        platform: 'node',
-        minify: false,
-        sourcemap: 'inline',
-        bundle: true,
-        // https://github.com/egoist/tsup/issues/619
-        // noExternal: [/.*/],
-        splitting: false,
-      })
+      const { name } = JSON.parse(readFileSync('package.json', 'utf-8'))
+      await build(PLUGIN_BUILD_CONFIG(name))
     })
   )
   .addCommand(
     new Command(`watch`).action(async () => {
       console.log(`starting to build`)
-      await build({
-        format: ['cjs'],
-        entry: globSync(`src/*.{js,ts}`, { ignore: ['src/*.pb.js'] }),
-        shims: true,
-        skipNodeModulesBundle: true,
-        clean: false,
-        target: 'node20',
-        platform: 'node',
-        minify: false,
-        loader: { '.pb.js': 'text' },
-        sourcemap: 'inline',
-        bundle: true,
-        watch: true,
-        // https://github.com/egoist/tsup/issues/619
-        // noExternal: [/.*/],
-        splitting: false,
-      })
+      const { name } = JSON.parse(readFileSync('package.json', 'utf-8'))
+      await build({ ...PLUGIN_BUILD_CONFIG(name), watch: true })
     })
   )
 

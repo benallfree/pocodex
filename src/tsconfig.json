@@ -2,7 +2,7 @@
   "compilerOptions": {
     "lib": ["ES2020"],
     "resolveJsonModule": true,
-    "types": ["pocketbase-jsvm"],
+    "types": ["pocketbase-jsvm", "immer"],
     "moduleResolution": "node"
   },
   "include": ["./**/*.ts"]
