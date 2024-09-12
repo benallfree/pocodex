@@ -1,6 +1,6 @@
 import { dbg, log } from 'pocketbase-log'
+import { logo } from './logo'
 import { installPlugin } from './plugin/install'
-import { logo } from './RootCommand'
 
 export const InstallCommand = () => {
   const cmd = new Command({

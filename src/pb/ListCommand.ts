@@ -1,4 +1,5 @@
 import { log } from 'pocketbase-log'
+import { logo } from './logo'
 import { getPluginMetas } from './plugin/meta'
 
 export const ListCommand = () => {
@@ -8,6 +9,7 @@ export const ListCommand = () => {
     short: 'List plugins (local and global)',
 
     run: (cmd, args) => {
+      logo()
       const plugins = getPluginMetas($app.dao())
       log('Plugins:')
 

@@ -1,4 +1,5 @@
 import { dbg } from 'pocketbase-log'
+import { logo } from './logo'
 
 export const EnableCommand = () =>
   new Command({
@@ -10,6 +11,7 @@ export const EnableCommand = () =>
     },
     short: `Enable a plugin`,
     run: (cmd, args) => {
+      logo()
       dbg('Hello from pocodex enable command!')
     },
   })

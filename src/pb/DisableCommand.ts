@@ -1,4 +1,5 @@
 import { dbg } from 'pocketbase-log'
+import { logo } from './logo'
 
 export const DisableCommand = () =>
   new Command({
@@ -10,6 +11,7 @@ export const DisableCommand = () =>
     },
     short: `Disable a plugin, but don't uninstall it`,
     run: (cmd, args) => {
+      logo()
       dbg('Hello from pocodex disable command!')
     },
   })
