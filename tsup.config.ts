@@ -25,6 +25,5 @@ export default defineConfig({
   // https://github.com/egoist/tsup/issues/619
   noExternal: [/^pocketbase-/, 'immer', '@s-libs/micro-dash'],
   splitting: false,
-  onSuccess: `cp src/*.d.ts dist && cp -r src/pb_migrations dist`,
 })
 ;``

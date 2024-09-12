@@ -2,7 +2,6 @@
   "compilerOptions": {
     "lib": ["ES2020"],
     "resolveJsonModule": true,
-    "typeRoots": ["../node_modules"],
     "types": ["pocketbase-jsvm"],
     "moduleResolution": "node"
   },
