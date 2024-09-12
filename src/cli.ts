@@ -103,13 +103,14 @@ program
       console.log(`starting to build`)
       await build({
         format: ['cjs'],
-        entry: globSync(`src/*.{js,ts}`),
+        entry: globSync(`src/*.{js,ts}`, { ignore: ['src/*.pb.js'] }),
         shims: true,
         skipNodeModulesBundle: true,
         clean: false,
         target: 'node20',
         platform: 'node',
         minify: false,
+        loader: { '.pb.js': 'text' },
         sourcemap: 'inline',
         bundle: true,
         watch: true,

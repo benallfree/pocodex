@@ -92,7 +92,9 @@ export const setSetting = <T>(
         dbg(`Created setting ${owner}:${type}:${key}`, { record })
         finalValue = newValue
       } catch (e) {
-        dbg(`Error saving setting ${owner}:${type}:${key}`, e)
+        dbg(`Error saving setting ${owner}:${type}:${key}`)
+        dbg(e)
+        throw e
       }
     }
   })
@@ -113,9 +115,9 @@ export const deleteSettings = (
     if (key) {
       expressions.push($dbx.exp(`key = {:key}`, { key }))
     }
-    dbg(`Deleting settings ${owner}:${type}:${key}`)
-    const records = dao.findRecordsByExpr('pocodex', ...expressions)
     dao.runInTransaction((txDao) => {
+      dbg(`Deleting settings ${owner}:${type}:${key}`)
+      const records = dao.findRecordsByExpr('pocodex', ...expressions)
       records
         .filter((r): r is models.Record => !!r)
         .forEach((record) => {
@@ -127,6 +129,7 @@ export const deleteSettings = (
           } catch (e) {
             dbg(`Error deleting setting ${owner}:${type}:${key}: ${e}`)
             dbg(e)
+            throw e
           }
         })
     })
@@ -134,5 +137,6 @@ export const deleteSettings = (
   } catch (e) {
     dbg(`Error deleting setting ${owner}:${type}:${key}: ${e}`)
     dbg(e)
+    throw e
   }
 }

@@ -19,12 +19,17 @@ export const initPlugins = (dao: daos.Dao) => {
     dbg(`Plugin metas`, { pluginMetas })
 
     pluginMetas.forEach((record) => {
-      const { key, value } = record
-      dbg(`Initializing plugin ${key}`)
-      const plugin = loadPlugin($app.dao(), key)
-      dbg(`Loaded, calling init`)
-      plugin.init?.(dao)
-      migrateUp(dao, plugin)
+      try {
+        const { key, value } = record
+        dbg(`Initializing plugin ${key}`)
+        const plugin = loadPlugin($app.dao(), key)
+        dbg(`Loaded, calling init`)
+        plugin.init?.(dao)
+        migrateUp(dao, plugin)
+      } catch (e) {
+        error(`Failed to initialize plugin ${record.key}: ${e}`)
+        dbg(e)
+      }
     })
   } catch (e) {
     error(`Failed to initialize plugins: ${e}`)

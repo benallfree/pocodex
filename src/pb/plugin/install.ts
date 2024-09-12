@@ -1,4 +1,6 @@
-import { dbg, log } from 'pocketbase-log'
+import { forEach } from '@s-libs/micro-dash'
+import { dbg, error, log } from 'pocketbase-log'
+import { writeFileSync } from 'pocketbase-node'
 import { getPackageManager, installPackage } from '../PackageManager'
 import { loadPlugin, loadPluginSafeMode } from './load'
 import { deletePluginMeta, hasPluginMeta, initPluginMeta } from './meta'
@@ -8,10 +10,11 @@ import { deleteSettings } from './settings'
 export const uninstallPlugin = (dao: daos.Dao, pluginName: string) => {
   const plugin = loadPluginSafeMode(dao, pluginName)
   dao.runInTransaction((txDao) => {
+    log(`Migrating down plugin ${plugin.name}`)
     migrateDown(txDao, plugin)
-    dbg(`Deleting plugin meta for ${plugin.name}`)
+    log(`Deleting plugin meta for ${plugin.name}`)
     deletePluginMeta(txDao, plugin.name)
-    dbg(`Deleting settings owned by ${plugin.name}`)
+    log(`Deleting settings owned by ${plugin.name}`)
     deleteSettings(txDao, plugin.name)
   })
 }
@@ -26,18 +29,17 @@ export const installPlugin = (
 
   const packageManager = getPackageManager()
 
-  try {
-    dbg(`Checking for existing plugin meta`)
-    const hasMeta = hasPluginMeta(dao, pluginName)
+  dbg(`Checking for existing plugin meta`)
+  const hasMeta = hasPluginMeta(dao, pluginName)
+  if (hasMeta) {
     const shouldBlock = hasMeta && !force
 
     if (shouldBlock) {
-      log(`Plugin ${pluginName} already installed. Use --force to reinstall.`)
+      error(`Plugin ${pluginName} already installed. Use --force to reinstall.`)
       return
     }
+    log(`Force reinstalling plugin ${pluginName}`)
     uninstallPlugin(dao, pluginName)
-  } catch (e) {
-    dbg(`Did not find plugin meta for ${pluginName}`)
   }
 
   try {
@@ -46,7 +48,7 @@ export const installPlugin = (
         const output = installPackage(packageManager, packageSpec)
         log(output)
       } catch (e) {
-        log(`Failed to install package ${pluginName}: ${e}`)
+        error(`Failed to install package ${pluginName}: ${e}`)
         throw e
       }
 
@@ -55,7 +57,7 @@ export const installPlugin = (
           log(`Loading plugin...`)
           return loadPlugin(txDao, pluginName)
         } catch (e) {
-          log(`Failed to load plugin ${pluginName}: ${e}`)
+          error(`Failed to load plugin ${pluginName}: ${e}`)
           if (`${e}`.match(/invalid module/i)) {
             log(e)
           }
@@ -67,19 +69,31 @@ export const installPlugin = (
         log(`Initializing settings...`)
         initPluginMeta(txDao, pluginName)
       } catch (e) {
-        log(`Failed to initialize plugin meta for ${pluginName}: ${e}`)
+        error(`Failed to initialize plugin meta for ${pluginName}: ${e}`)
         throw e
       }
 
       try {
         migrateUp(txDao, plugin)
       } catch (e) {
-        log(`Failed to migrate plugin ${pluginName}: ${e}`)
+        error(`Failed to migrate plugin ${pluginName}: ${e}`)
+        throw e
+      }
+
+      try {
+        log(plugin.files?.(txDao))
+        forEach(plugin.files?.(txDao), (content, dst) => {
+          log(`Writing ${dst}`)
+          writeFileSync(dst, content)
+        })
+      } catch (e) {
+        error(`Failed to copy files for plugin ${pluginName}: ${e}`)
+        dbg(e)
         throw e
       }
     })
   } catch (e) {
-    log(
+    error(
       `Fatal: failed to install package ${pluginName}. See above for details.`
     )
     dbg(e)
