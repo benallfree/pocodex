@@ -1,11 +1,14 @@
-import { dbg, error } from 'pocketbase-log'
+import { dbg, log } from 'pocketbase-log'
 import { installPlugin } from './plugin/install'
+import { logo } from './RootCommand'
 
 export const InstallCommand = () => {
   const cmd = new Command({
     use: 'install [name]',
     short: `Install a plugin`,
     run: (cmd, args) => {
+      logo()
+
       const force = cmd.flag(`force`).value.toString() === 'true'
       const link = cmd.flag(`link`).value.toString() === 'true'
 
@@ -13,14 +16,13 @@ export const InstallCommand = () => {
 
       const pluginName = args.shift()
       if (!pluginName) {
-        error('Plugin name is required')
+        log('Plugin name is required')
         return
       }
-      dbg(`Installing plugin ${pluginName}`, { args, link, force })
+      log(`Installing plugin ${pluginName}`)
+      dbg({ args, link, force })
 
       installPlugin($app.dao(), pluginName, link, force)
-
-      dbg('Hello from pocodex install command!')
     },
   })
 

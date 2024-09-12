@@ -4,7 +4,7 @@ import { getSetting, setSetting } from './settings'
 
 export const loadPlugin = (txDao: daos.Dao, pluginName: string) => {
   const configuredModule = loadPluginSafeMode(txDao, pluginName)
-  configuredModule.init(txDao)
+  configuredModule.init?.(txDao)
   return configuredModule
 }
 

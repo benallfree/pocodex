@@ -16,11 +16,11 @@ export type PluginConfig = {
 }
 
 export type Plugin = {
-  init(dao: daos.Dao): void
-  install(dao: daos.Dao): void
-  uninstall(dao: daos.Dao): void
-  files(dao: daos.Dao): Record<string, string>
-  migrations(): { [migrationName: string]: MigrationSet }
+  init?(dao: daos.Dao): void
+  install?(dao: daos.Dao): void
+  uninstall?(dao: daos.Dao): void
+  files?(dao: daos.Dao): Record<string, string>
+  migrations?(): { [migrationName: string]: MigrationSet }
 }
 export type PluginConfigured = Plugin & { name: string }
 

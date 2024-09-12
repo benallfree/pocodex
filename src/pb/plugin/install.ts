@@ -1,4 +1,4 @@
-import { dbg, error, info } from 'pocketbase-log'
+import { dbg, log } from 'pocketbase-log'
 import { getPackageManager, installPackage } from '../PackageManager'
 import { loadPlugin, loadPluginSafeMode } from './load'
 import { deletePluginMeta, hasPluginMeta, initPluginMeta } from './meta'
@@ -32,7 +32,7 @@ export const installPlugin = (
     const shouldBlock = hasMeta && !force
 
     if (shouldBlock) {
-      error(`Plugin ${pluginName} already installed. Use --force to reinstall.`)
+      log(`Plugin ${pluginName} already installed. Use --force to reinstall.`)
       return
     }
     uninstallPlugin(dao, pluginName)
@@ -42,18 +42,46 @@ export const installPlugin = (
 
   try {
     dao.runInTransaction((txDao) => {
-      const output = installPackage(packageManager, pluginName, link)
-      info(output)
+      try {
+        const output = installPackage(packageManager, pluginName, link)
+        log(output)
+      } catch (e) {
+        log(`Failed to install package ${pluginName}: ${e}`)
+        throw e
+      }
 
-      dbg(`Loading plugin ${pluginName}`)
-      const plugin = loadPlugin(txDao, pluginName)
-      dbg(`Plugin loaded, initializing meta`)
+      const plugin = (() => {
+        try {
+          log(`Loading plugin...`)
+          return loadPlugin(txDao, pluginName)
+        } catch (e) {
+          log(`Failed to load plugin ${pluginName}: ${e}`)
+          if (`${e}`.match(/invalid module/i)) {
+            log(e)
+          }
+          throw e
+        }
+      })()
 
-      initPluginMeta(txDao, pluginName)
-      migrateUp(txDao, plugin)
+      try {
+        log(`Initializing settings...`)
+        initPluginMeta(txDao, pluginName)
+      } catch (e) {
+        log(`Failed to initialize plugin meta for ${pluginName}: ${e}`)
+        throw e
+      }
+
+      try {
+        migrateUp(txDao, plugin)
+      } catch (e) {
+        log(`Failed to migrate plugin ${pluginName}: ${e}`)
+        throw e
+      }
     })
   } catch (e) {
-    error(`Failed to install package ${pluginName}: ${e}`)
+    log(
+      `Fatal: failed to install package ${pluginName}. See above for details.`
+    )
     dbg(e)
   }
 }

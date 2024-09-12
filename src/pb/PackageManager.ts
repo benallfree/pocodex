@@ -1,4 +1,4 @@
-import { dbg, error } from 'pocketbase-log'
+import { log } from 'pocketbase-log'
 // @ts-ignore
 import { child_process, fs, path, process } from 'pocketbase-node'
 
@@ -35,11 +35,11 @@ function installPackage(manager: string, packageName: string, link = false) {
             : null
 
   if (!command) {
-    error('Unsupported package manager')
+    log('Unsupported package manager')
     return
   }
 
-  dbg(`Running command: ${command.join(' ')}`)
+  log(`Running command: ${command.join(' ')}`)
   const output = child_process.execSync(command)
   return output
 }

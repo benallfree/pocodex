@@ -18,7 +18,7 @@ export const initPlugins = (dao: daos.Dao) => {
       dbg(`Initializing plugin ${key}`)
       const plugin = loadPlugin($app.dao(), key)
       dbg(`Loaded, calling init`)
-      plugin.init(dao)
+      plugin.init?.(dao)
       migrateUp(dao, plugin)
     })
   } catch (e) {
