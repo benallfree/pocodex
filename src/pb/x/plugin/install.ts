@@ -71,6 +71,13 @@ export const installPlugin = (
       try {
         log(plugin.files?.(txDao))
         forEach(plugin.files?.(txDao), (content, dst) => {
+          if (fs.existsSync(dst)) {
+            const currentContent = fs.readFileSync(dst, 'utf-8')
+            if (currentContent != content) {
+              log(`Refusing to overwrite ${dst} because it has been modified`)
+              return
+            }
+          }
           log(`Writing ${dst}`)
 
           fs.mkdirSync(path.dirname(dst))
