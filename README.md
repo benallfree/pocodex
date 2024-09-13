@@ -12,3 +12,9 @@ yarn add pocodex
 pnpm add pocodex
 bun add pocodex --trust
 ```
+
+Then
+
+```bash
+pocketbase x --help
+```
