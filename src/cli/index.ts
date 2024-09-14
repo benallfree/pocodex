@@ -62,6 +62,7 @@ const PLUGIN_BUILD_CONFIG = (packageName: string): Options => {
     // https://github.com/egoist/tsup/issues/619
     external: [packageName],
     splitting: false,
+    dts: true,
   }
   console.log({ config })
   return config
