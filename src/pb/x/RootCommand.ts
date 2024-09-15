@@ -8,7 +8,7 @@ import { logo } from './logo'
 
 export const RootCommand = () => {
   const cmd = new Command({
-    use: 'x',
+    use: 'pocodex',
     short:
       'pocodex, the unofficial PocketBase Code Exchange: plugins, starter kits, and more',
     run: (cmd, args) => {
