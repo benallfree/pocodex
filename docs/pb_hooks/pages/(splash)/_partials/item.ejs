@@ -1,0 +1,21 @@
+<a
+  href="/plugins/<%= plugin.name %>"
+  class="block rounded-sm border-2 border-neutral md:mr-2 mb-2 p-2 relative no-underline"
+>
+  <div
+    class="absolute text-4xl top-2 right-2 text-yellow-400 flex flex-row items-center"
+    style="background-color: var(--fallback-b1, oklch(var(--b1) / 1))"
+  >
+    <%= data.favorited[plugin.name] ? `★`: `☆` %><span
+      class="text-xs text-neutral-content"
+      ><%= plugin.stars %></span
+    >
+  </div>
+  <div class="">
+    <div class="inline-block">
+      <h1 class="text-2xl font-bold"><%= plugin.name %></h1>
+    </div>
+  </div>
+  <div><%= plugin.description %></div>
+  <div class="text-xs">v<%= plugin.version %></div>
+</a>

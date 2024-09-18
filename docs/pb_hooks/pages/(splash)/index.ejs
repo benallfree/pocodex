@@ -1,0 +1,16 @@
+<h2 class="bg-primary text-primary-content p-2">🔥 Popular</h2>
+<div class="m-4">
+  <% data.plugins.forEach(plugin => { %> <%-include('./_partials/item.ejs', {
+  plugin, data }) %> <% }) %>
+</div>
+
+<h2 class="bg-primary text-primary-content p-2">⏰ Recently Updated</h2>
+<div class="m-4">
+  <% data.plugins.forEach(plugin => { %> <%-include('./_partials/item.ejs', {
+  plugin, data }) %> <% }) %>
+</div>
+<h2 class="bg-primary text-primary-content p-2">✨ New</h2>
+<div class="m-4">
+  <% data.plugins.forEach(plugin => { %> <%-include('./_partials/item.ejs', {
+  plugin, data }) %> <% }) %>
+</div>

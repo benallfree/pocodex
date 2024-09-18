@@ -1,0 +1,29 @@
+{
+  "name": "@pocodex/site",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "concurrently \"bun:dev:*\"",
+    "pocketbase": "pocketbase --dir=pb_data",
+    "serve": "bun pocketbase serve",
+    "dev:serve": "bun run serve --dev",
+    "dev:css": "tailwindcss -i ./pb_hooks/pages/assets/app.tailwind.css -o ./pb_hooks/pages/assets/app.css --watch",
+    "dev:deploy:watch": "pockethost deploy --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "concurrently": "^9.0.1",
+    "daisyui": "^4.12.10",
+    "gobot-pocketbase": "^0.22.20-14",
+    "postcss-import": "^16.1.0",
+    "tailwindcss": "^3.4.11"
+  },
+  "dependencies": {
+    "pocketbase-jsvm": "^0.22.20001",
+    "pocketpages": "^0.5.0",
+    "pocodex": "^0.0.2"
+  },
+  "trustedDependencies": [
+    "esbuild",
+    "gobot-pocketbase"
+  ]
+}
