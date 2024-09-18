@@ -1,7 +1,7 @@
 {
     "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
     "version": "1.0.0",
-    "generatedTime": 1726629642045,
+    "generatedTime": 1726633401187,
     "data": [
         {
             "type": "file",
@@ -92,6 +92,10 @@
             "hash": "b7158befd73a140a188b331369ebcf9bdf15e5dfc0b62c2ff6d268f42437b2e0"
         },
         {
+            "type": "folder",
+            "name": "pb_hooks/pages/_includes"
+        },
+        {
             "type": "file",
             "name": "pb_hooks/pages/+pocketpages.pb.js",
             "size": 521,
@@ -106,8 +110,8 @@
         {
             "type": "file",
             "name": "pb_hooks/pages/+layout.ejs",
-            "size": 3266,
-            "hash": "6938929c5195fa39a8897d142409f8c913f3210104512bab8f9cefd5b59143e2"
+            "size": 3260,
+            "hash": "a3270593d77629fae967b29179720be4e336ca9ad8374c67a32acf2d5b01bebe"
         },
         {
             "type": "folder",
@@ -120,32 +124,38 @@
         {
             "type": "file",
             "name": "pb_hooks/pages/assets/prism.js",
-            "size": 33966,
-            "hash": "6355f4a1b7a652c699c65a93cc8c9472f38240a59be0ebf2a6e64d9d41bc8058"
+            "size": 33961,
+            "hash": "9a107823f2f558130c18a58b629f53303a25eff55338cb698bcbae4fb3caea7c"
         },
         {
             "type": "file",
             "name": "pb_hooks/pages/assets/prism.css",
-            "size": 3971,
-            "hash": "583a2fec06521819cc7a7b40c22b3dbdf66ddd74f554e3cbfc74d78d1a09d3ef"
+            "size": 6071,
+            "hash": "7f11658bdb30cbef9538182f294d3b06abfc77f34b663abe90693ae483f0bc80"
         },
         {
             "type": "file",
             "name": "pb_hooks/pages/assets/app.tailwind.css",
-            "size": 1512,
-            "hash": "f7bf0b186d601038a0fa9a1d1b33d5de3ba27a3263fc7896850d44cfd093ad97"
+            "size": 1490,
+            "hash": "82a329b5f201082cf326fc9ca6c4a4ef6899b0adb8607fd0c8f39bdd43a0287b"
         },
         {
             "type": "file",
             "name": "pb_hooks/pages/assets/app.css",
-            "size": 69606,
-            "hash": "f026fc2a7485aa8c6e57863b545e804b941288cba1221b9aeb6b8b1877a32b88"
+            "size": 69444,
+            "hash": "f09b1a413ba54c9c80f128a07451875f4c07d53603ef53050df539bec90fc27b"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/_includes/version.ejs",
+            "size": 250,
+            "hash": "bd9a387704123b2cb4c4f235479bd47a3f5f9a3cbfc4dbf3c6c690354bc208b6"
         },
         {
             "type": "file",
             "name": "pb_hooks/pages/(splash)/index.ejs",
-            "size": 601,
-            "hash": "ab2236ad401dc91ae1608873ad18b2307382a272be04eeb4ab867b9c57bfbc3f"
+            "size": 199,
+            "hash": "e2f52e4fee80a40b4575210dbe7b675255d84435d72a5c02e30fbaa9a23807b1"
         },
         {
             "type": "folder",
@@ -154,8 +164,8 @@
         {
             "type": "file",
             "name": "pb_hooks/pages/(splash)/+load.js",
-            "size": 3637,
-            "hash": "0bd10117b9cece45f5ad3e1632135a55e1f45ecb95101308a7dea0535479e333"
+            "size": 404,
+            "hash": "50749015bc4260a0b8d3ed2ba0b5ca5533ce6fe01a0c0a9c05de217961bdc777"
         },
         {
             "type": "file",
@@ -166,8 +176,8 @@
         {
             "type": "file",
             "name": "pb_hooks/pages/(splash)/_partials/item.ejs",
-            "size": 676,
-            "hash": "954b13e6e28d9c417f2f0e706778e44e9642441a06d5e4f90c069af89e41af39"
+            "size": 1056,
+            "hash": "fde76a80305f405415d3a5b53bbf088a18e1d1ba03d5834908ab52b4925bf084"
         },
         {
             "type": "folder",

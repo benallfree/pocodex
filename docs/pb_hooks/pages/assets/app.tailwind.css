@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+  .prose pre code {
+    @apply p-4;
+  }
   .code-toolbar {
     @apply max-w-lg;
   }
@@ -21,9 +24,6 @@
       @apply m-0 p-0;
       @apply text-sm;
     }
-  }
-  pre {
-    background-color: #282c34 !important;
   }
 }
 
@@ -44,7 +44,7 @@ div.code-toolbar {
 div.code-toolbar > .toolbar > .toolbar-item > a,
 div.code-toolbar > .toolbar > .toolbar-item > button,
 div.code-toolbar > .toolbar > .toolbar-item > span {
-  @apply text-neutral-content bg-neutral-700 lowercase p-0.5 pb-1;
+  @apply text-accent-content bg-accent lowercase p-2;
 }
 
 div.code-toolbar > .toolbar > .toolbar-item > a:hover,
@@ -53,7 +53,7 @@ div.code-toolbar > .toolbar > .toolbar-item > button:hover,
 div.code-toolbar > .toolbar > .toolbar-item > button:focus,
 div.code-toolbar > .toolbar > .toolbar-item > span:hover,
 div.code-toolbar > .toolbar > .toolbar-item > span:focus {
-  @apply bg-neutral-600 text-neutral-content;
+  @apply bg-accent text-accent-content opacity-80;
 }
 
 div.code-toolbar > .toolbar > .toolbar-item > a[data-copy-state='copy-success'],
