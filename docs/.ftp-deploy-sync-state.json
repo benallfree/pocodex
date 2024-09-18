@@ -1,0 +1,241 @@
+{
+    "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
+    "version": "1.0.0",
+    "generatedTime": 1726629642045,
+    "data": [
+        {
+            "type": "file",
+            "name": "package.json",
+            "size": 836,
+            "hash": "4e914ccca5325b8847d519714a52216558c731187ef1d97b6a858ba3e5c58919"
+        },
+        {
+            "type": "file",
+            "name": "bun.lockb",
+            "size": 124024,
+            "hash": "5b37082e2a5563d5e0d7fd21149ea3c433a8ace23ca40fbd9b401d7ea918b72b"
+        },
+        {
+            "type": "folder",
+            "name": "pb_migrations"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks"
+        },
+        {
+            "type": "file",
+            "name": "pb_migrations/1725942258_create_pocodex.js",
+            "size": 6676,
+            "hash": "ecd43b40c26d53febdaf3822d23a82df2bcad63cf5c6faff091def5a8fcd2062"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pocodex.pb.js",
+            "size": 860,
+            "hash": "3e73e0aa31c3e086420acd0f38f996343deeb173d0a66ebcf878af03b6c41aef"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pocketpages.pb.js",
+            "size": 36,
+            "hash": "a8796b4726fc71beb70ffb67178a1ba3befc3df89562e7b7bb866e49694ed0e6"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/site.webmanifest",
+            "size": 263,
+            "hash": "7a9e07ce1f7386689917602ddc5a75750ad842e605ff764f67173529c181bf04"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/favicon.ico",
+            "size": 15406,
+            "hash": "7d0e312656bbeb34d2b7a4620f587fb54ea445764c82f5b1b99cfada06635c07"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/favicon-32x32.png",
+            "size": 2531,
+            "hash": "4f862f13664e911c16c4f7e38776ac6fb1c50272042118ba6b1667d71725bc37"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/favicon-16x16.png",
+            "size": 930,
+            "hash": "191d0f2545fe8bd115997dd81bd0291153690ace18cce05e61d7ed48db8dbb98"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages/assets"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/apple-touch-icon.png",
+            "size": 38497,
+            "hash": "5835504b555da848de8df1f4fc2def55164eb2fa87429397cc22ac6bc952575f"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/android-chrome-512x512.png",
+            "size": 174686,
+            "hash": "a92f2c079becc09e5024266525a66b7ac525d892375a690ed1c45195f9d94df6"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/android-chrome-192x192.png",
+            "size": 42729,
+            "hash": "b7158befd73a140a188b331369ebcf9bdf15e5dfc0b62c2ff6d268f42437b2e0"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/+pocketpages.pb.js",
+            "size": 521,
+            "hash": "02ab1f9c4dca71b7eb5c98ca1804ab73d1d356d348952aff942ccfc7a15725db"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/+middleware.js",
+            "size": 109,
+            "hash": "02a6b7b7fa3829830f1df3ad568da0d33eff54255e86d77e22d3e1258ed17b08"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/+layout.ejs",
+            "size": 3266,
+            "hash": "6938929c5195fa39a8897d142409f8c913f3210104512bab8f9cefd5b59143e2"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages/(splash)"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages/(main)"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/assets/prism.js",
+            "size": 33966,
+            "hash": "6355f4a1b7a652c699c65a93cc8c9472f38240a59be0ebf2a6e64d9d41bc8058"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/assets/prism.css",
+            "size": 3971,
+            "hash": "583a2fec06521819cc7a7b40c22b3dbdf66ddd74f554e3cbfc74d78d1a09d3ef"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/assets/app.tailwind.css",
+            "size": 1512,
+            "hash": "f7bf0b186d601038a0fa9a1d1b33d5de3ba27a3263fc7896850d44cfd093ad97"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/assets/app.css",
+            "size": 69606,
+            "hash": "f026fc2a7485aa8c6e57863b545e804b941288cba1221b9aeb6b8b1877a32b88"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(splash)/index.ejs",
+            "size": 601,
+            "hash": "ab2236ad401dc91ae1608873ad18b2307382a272be04eeb4ab867b9c57bfbc3f"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages/(splash)/_partials"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(splash)/+load.js",
+            "size": 3637,
+            "hash": "0bd10117b9cece45f5ad3e1632135a55e1f45ecb95101308a7dea0535479e333"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(splash)/+layout.ejs",
+            "size": 55,
+            "hash": "8ef1d939787cc1ddef3c6ed8b1949e9e7b2344859bf31934c865b7c23ce6c86d"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(splash)/_partials/item.ejs",
+            "size": 676,
+            "hash": "954b13e6e28d9c417f2f0e706778e44e9642441a06d5e4f90c069af89e41af39"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages/(main)/docs"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/+layout.ejs",
+            "size": 12,
+            "hash": "3ca951f925b6db7b3ceac2c2934158c211989449f6c53ab21222b525a570e37d"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/toc.md",
+            "size": 273,
+            "hash": "b394dafd1cf74ac8d5a81f8f842bf7a620311803e9a2a1ebfd1d471600f8b8c5"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/index.md",
+            "size": 1635,
+            "hash": "269e047d925ddf4b95dac0bdb44181add1e9b96e6e4b0e12dfb118f3ce3deec2"
+        },
+        {
+            "type": "folder",
+            "name": "pb_hooks/pages/(main)/docs/authoring"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/+layout.ejs",
+            "size": 696,
+            "hash": "f1c96230afef62be383d12e094eb9c4a38f1f332e3fd174e0ed63c2fc5ad2b04"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/authoring/notes.md",
+            "size": 891,
+            "hash": "0866a59018e1cf7ffc399fcfffd5309baec3f37cefe119847156025d026744ec"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/authoring/migrations.md",
+            "size": 2378,
+            "hash": "764bc0f9d45b759c3568f203c99e8c333408aa03490ee04f42f96eb5adf44c15"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/authoring/index.md",
+            "size": 1846,
+            "hash": "5ab93d34c45468d47f327cee7075c987dc7ecea1360d75e9d40e1a60ccc360ae"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/authoring/first-plugin.md",
+            "size": 1997,
+            "hash": "7a724c3b0421323d61a8e74129d500b634ecb6af94a440831ca4ca1564b66f89"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/authoring/files.md",
+            "size": 3476,
+            "hash": "f4a4bb6f5b2e2988b15ebe2e15bd59a1404d2967b81da90211c27ad8f29ef00f"
+        },
+        {
+            "type": "file",
+            "name": "pb_hooks/pages/(main)/docs/authoring/api.md",
+            "size": 6386,
+            "hash": "ea39f8805dae02d42c6b060c95de1dcf00d62b55da87b6eb02ba3e2c99311e1b"
+        }
+    ]
+}
